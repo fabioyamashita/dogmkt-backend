@@ -5,8 +5,18 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const bodyParser = require("body-parser");
+
+const globalErrorHandler = require("./middlewares/globalErrorHandler");
+const userRouter = require("./routes/user.routes");
 
 const app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 // Set security HTTP Header
 app.use(helmet());
@@ -37,5 +47,11 @@ app.use(
     whitelist: [],
   })
 );
+
+// ROUTES
+app.use("/api/v1/users", userRouter);
+
+// Global Error handling middleware
+app.use(globalErrorHandler);
 
 module.exports = app;
