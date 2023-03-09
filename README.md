@@ -11,5 +11,9 @@ $ docker-compose --env-file config-example.env up -d
 ## Local Tests
 
 ```
+// For detailed errors
 $ npm run start:dev
+
+// For production errors
+$ npm run start:prod
 ```
