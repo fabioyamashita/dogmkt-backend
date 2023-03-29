@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
+const transformUserModelOutput = function (doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+  delete ret.__v;
+};
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -38,7 +44,16 @@ const userSchema = new mongoose.Schema(
       },
     },
   },
-  { versionKey: false }
+  {
+    toJSON: {
+      virtuals: true,
+      transform: transformUserModelOutput,
+    },
+    toObject: { 
+      virtuals: true, 
+      transform: transformUserModelOutput 
+    },
+  }
 );
 
 userSchema.pre("save", async function (next) {
