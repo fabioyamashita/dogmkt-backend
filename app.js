@@ -15,7 +15,7 @@ const app = express();
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// parse application/json
+// parse application/json - to make req.body work properly and not return undefined
 app.use(bodyParser.json());
 
 // Set security HTTP Header
