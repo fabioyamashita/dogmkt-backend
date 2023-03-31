@@ -35,7 +35,7 @@ paths:
                       x-stoplight:
                         id: 14hj49dez5uu4
                   pagination:
-                    $ref: '#/components/schemas/PaginationModel'
+                    $ref: '#/components/schemas/Pagination'
                     x-stoplight:
                       id: j7p5dh38iwzd4
                     description: Pagination info.
@@ -66,7 +66,7 @@ paths:
                       isLast: false
                       totalElements: 8
         '400':
-          description: Bad Request.
+          description: The request contains malformed data in query parameters.
           content:
             application/json:
               schema:
@@ -78,7 +78,7 @@ paths:
                     message: Invalid request parameters.
                     details: Check the URL.
         '401':
-          description: Unauthorized.
+          description: Bad or expired token.
           content:
             application/json:
               schema:
@@ -107,6 +107,12 @@ paths:
         - Dogs
       parameters:
         - schema:
+            type: string
+            example: fdaf5151-fdaf5151
+          in: query
+          name: idSeller
+          description: ID of the seller to filter the list of dogs.
+        - schema:
             type: integer
             minimum: 1
             example: 5
@@ -126,48 +132,6 @@ paths:
         - Token: []
 components:
   schemas:
-    User:
-      title: User
-      type: object
-      description: ''
-      examples:
-        - id: 142
-          firstName: Alice
-          lastName: Smith
-          email: alice.smith@gmail.com
-          dateOfBirth: '1997-10-31'
-          emailVerified: true
-          signUpDate: '2019-08-24'
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the given user.
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        dateOfBirth:
-          type: string
-          format: date
-          example: '1997-10-31'
-        emailVerified:
-          type: boolean
-          description: Set to true if the user's email has been verified.
-        createDate:
-          type: string
-          format: date
-          description: The date that the user was created.
-      required:
-        - id
-        - firstName
-        - lastName
-        - email
-        - emailVerified
-      x-stoplight:
-        id: htvfumzulsijp
     Dog:
       type: object
       description: Dog model.
@@ -260,7 +224,7 @@ components:
         - weight
         - height
         - width
-    PaginationModel:
+    Pagination:
       title: Pagination
       x-stoplight:
         id: oge7sn10idrio
@@ -323,64 +287,6 @@ components:
         - isFirst
         - isLast
         - totalElements
-    ErrorModel:
-      title: ErrorModel
-      x-stoplight:
-        id: 4fta1ijtqxwc4
-      type: object
-      description: Error response model.
-      properties:
-        code:
-          type: string
-          x-stoplight:
-            id: q4mel22j4avl6
-          description: A code that represents the error.
-          example: ERR-001
-        message:
-          type: string
-          x-stoplight:
-            id: 0s3jkazahv81g
-          description: An error message.
-          example: Invalid input parameter.
-        details:
-          type: string
-          x-stoplight:
-            id: fhm72ww5529qp
-          example: The parameter 'page' must be a positive integer.
-          description: Details about the error.
-      examples:
-        - code: ERR-001
-          message: Invalid input parameter.
-          details: The parameter 'page' must be a positive integer.
-    UnauthorizedError401:
-      title: Unauthorized Error - 401
-      x-stoplight:
-        id: e7quxsnc45tqv
-      type: object
-      description: Unauthorized Error response model.
-      examples:
-        - code: ERR-001
-          message: Invalid input parameter.
-          details: The parameter 'page' must be a positive integer.
-      properties:
-        code:
-          type: string
-          x-stoplight:
-            id: q4mel22j4avl6
-          description: A code that represents the error.
-          example: ERR-002
-        message:
-          type: string
-          x-stoplight:
-            id: 0s3jkazahv81g
-          description: An error message.
-          example: Unauthorized.
-        details:
-          type: string
-          x-stoplight:
-            id: fhm72ww5529qp
-          example: Authentication credentials are missing or invalid.
-          description: Details about the error.
     BadRequestError400:
       title: Bad Request Error - 400
       x-stoplight:
@@ -409,6 +315,35 @@ components:
           x-stoplight:
             id: fhm72ww5529qp
           example: Check the URL.
+          description: Details about the error.
+    UnauthorizedError401:
+      title: Unauthorized Error - 401
+      x-stoplight:
+        id: e7quxsnc45tqv
+      type: object
+      description: Unauthorized Error response model.
+      examples:
+        - code: ERR-001
+          message: Invalid input parameter.
+          details: The parameter 'page' must be a positive integer.
+      properties:
+        code:
+          type: string
+          x-stoplight:
+            id: q4mel22j4avl6
+          description: A code that represents the error.
+          example: ERR-002
+        message:
+          type: string
+          x-stoplight:
+            id: 0s3jkazahv81g
+          description: An error message.
+          example: Unauthorized.
+        details:
+          type: string
+          x-stoplight:
+            id: fhm72ww5529qp
+          example: Authentication credentials are missing or invalid.
           description: Details about the error.
     InternalServerError500:
       title: Internal Server Error - 500
