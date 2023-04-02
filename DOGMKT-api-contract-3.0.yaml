@@ -1,11 +1,10 @@
-openapi: 3.1.0
+openapi: 3.0.0
 x-stoplight:
-  id: 2a87tldx4hmt8
+  id: 0q7ldf7ano4yc
 info:
   title: DOGMKT API
   version: '1.0'
   description: DOGMKT API Contract for back-end project of the DOGMKT website.
-  summary: DOGMKT API Contract.
   contact:
     name: Fabio Yamashita
     email: fabioyamashita10@gmail.com
@@ -16,6 +15,8 @@ paths:
   /dogs:
     get:
       summary: Get Dogs in Sale
+      tags:
+        - Dogs
       responses:
         '200':
           description: A list of Dogs was successfully retrieved.
@@ -27,24 +28,26 @@ paths:
                 properties:
                   data:
                     x-stoplight:
-                      id: zgjvjh9a0ieil
-                    description: Dog Collection retrieved.
+                      id: i5r755rnq9e09
                     type: array
+                    description: Dog Collection retrieved.
                     items:
                       $ref: '#/components/schemas/Dog'
                       x-stoplight:
-                        id: 14hj49dez5uu4
+                        id: ji0exgkvs455c
                   pagination:
                     $ref: '#/components/schemas/Pagination'
                     x-stoplight:
-                      id: j7p5dh38iwzd4
-                    description: Pagination info.
+                      id: nv6acu2u954sa
+                required:
+                  - data
+                  - pagination
               examples:
                 Example 1:
                   value:
                     data:
                       - id: 507f1f77bcf86cd799439011
-                        sellerId: 147f1f77bcf86cd799439052
+                        idSeller: 147f1f77bcf86cd799439052
                         availableQuantity: 5
                         name: Admin Dog
                         breed: Others
@@ -58,11 +61,36 @@ paths:
                         pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
                     pagination:
                       first: 1
-                      last: 3
+                      last: 50
                       previous: 1
                       next: 3
-                      page: 1
+                      page: 2
                       isFirst: true
+                      isLast: true
+                      totalElements: 8
+                Example 2:
+                  value:
+                    data:
+                      - id: 507f1f77bcf86cd799439011
+                        idSeller: 147f1f77bcf86cd799439052
+                        availableQuantity: 5
+                        name: Admin Dog
+                        breed: Others
+                        genre: Male
+                        price: 5210.25
+                        description: Admin Dog.
+                        dateOfBirth: '2001-01-01'
+                        weight: 50.5
+                        height: 60.6
+                        width: 50.9
+                        pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+                    pagination:
+                      first: 1
+                      last: 50
+                      previous: 5
+                      next: 7
+                      page: 6
+                      isFirst: false
                       isLast: false
                       totalElements: 8
         '400':
@@ -70,7 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequestError400'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-400:
                   value:
@@ -82,7 +110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError401'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-401:
                   value:
@@ -94,7 +122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError500'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-500:
                   value:
@@ -103,8 +131,8 @@ paths:
                     details: There was a problem processing your request. Please try again later.
       operationId: get-dogs
       description: Retrieve a collection of Dogs in sale.
-      tags:
-        - Dogs
+      security:
+        - Token: []
       parameters:
         - schema:
             type: string
@@ -114,26 +142,31 @@ paths:
           description: ID of the seller to filter the list of dogs.
         - schema:
             type: integer
-            minimum: 1
             example: 5
+            minimum: 1
           in: query
           name: page
           description: The page number of the results to retrieve.
           required: true
         - schema:
             type: integer
-            minimum: 1
             example: 25
+            minimum: 1
           in: query
           name: limit
           description: The maximum number of results to return in each request.
           required: true
-      security:
-        - Token: []
-    parameters: []
   '/dogs/{idDog}':
+    parameters:
+      - schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name: idDog
+        in: path
+        required: true
+        description: ID of the dog.
     get:
-      summary: Get Dogs in Sale
+      summary: Get Dog by ID
       responses:
         '200':
           description: A Dog was successfully retrieved.
@@ -141,19 +174,17 @@ paths:
             application/json:
               schema:
                 type: object
-                description: The object result of the request.
                 properties:
                   data:
                     $ref: '#/components/schemas/Dog'
                     x-stoplight:
-                      id: zgjvjh9a0ieil
-                    description: Dog retrieved.
+                      id: vk19lp1jwybyw
               examples:
                 Example 1:
                   value:
                     data:
                       id: 507f1f77bcf86cd799439011
-                      sellerId: 147f1f77bcf86cd799439052
+                      idSeller: 147f1f77bcf86cd799439052
                       availableQuantity: 5
                       name: Admin Dog
                       breed: Others
@@ -170,7 +201,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequestError400'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-400:
                   value:
@@ -182,7 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError401'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-401:
                   value:
@@ -194,7 +225,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFoundError404'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-404:
                   value:
@@ -206,37 +237,131 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalServerError500'
+                $ref: '#/components/schemas/Error'
               examples:
                 example-error-500:
                   value:
                     code: ERR-500
                     message: Internal server error.
                     details: There was a problem processing your request. Please try again later.
-      operationId: get-dogById
+      operationId: get-dogbyId
       description: Retrieve a Dog in sale.
-      tags:
-        - Dogs
-      parameters: []
       security:
         - Token: []
-    parameters:
-      - schema:
-          type: string
-          example: 507f1f77bcf86cd799439011
-        name: idDog
-        in: path
-        required: true
-        description: ID of the dog.
+      tags:
+        - Dogs
 components:
   schemas:
     Dog:
+      title: Dog
+      x-stoplight:
+        id: jegw7fq1sdyhy
       type: object
       description: Dog model.
-      title: Dog
-      examples:
-        - id: 507f1f77bcf86cd799439011
-          sellerId: 147f1f77bcf86cd799439052
+      properties:
+        id:
+          type: string
+          description: The ID of the dog.
+          example: 507f1f77bcf86cd799439011
+        idSeller:
+          type: string
+          x-stoplight:
+            id: qq3axudn3l9ra
+          example: 147f1f77bcf86cd799439052
+          description: The ID of the seller who is selling the dog.
+        availableQuantity:
+          type: integer
+          x-stoplight:
+            id: m6nwyqijr62ds
+          example: 5
+          minimum: 0
+          description: The number of available dogs for sale.
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Admin Dog
+          description: The name of the dog.
+        breed:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: Others
+          description: The breed of the dog.
+        genre:
+          type: string
+          x-stoplight:
+            id: bdzd2x5fms2nn
+          enum:
+            - Male
+            - Female
+          example: Male
+          description: The gender of the dog.
+        price:
+          type: number
+          x-stoplight:
+            id: jmeqj4qdne1c4
+          example: 5000
+          description: The price of the dog.
+        description:
+          type: string
+          x-stoplight:
+            id: j7r0prgsuivq6
+          example: Admin Dog.
+          description: A brief description of the dog.
+        dateOfBirth:
+          type: string
+          x-stoplight:
+            id: g3kre0wi9l493
+          example: '2001-01-01'
+          description: The dog's date of birth.
+        weight:
+          type: number
+          x-stoplight:
+            id: zit86if6q92m8
+          example: 50
+          minimum: 0
+          exclusiveMinimum: true
+          description: The weight of the dog in kilograms.
+        height:
+          type: number
+          x-stoplight:
+            id: lcg6aiocgsqxw
+          example: 60
+          minimum: 0
+          exclusiveMinimum: true
+          description: The height of the dog in centimeters.
+        width:
+          type: number
+          x-stoplight:
+            id: 7l3jvsu5925c4
+          example: 50
+          minimum: 0
+          exclusiveMinimum: true
+          description: The width of the dog in centimeters.
+        pictureUrl:
+          type: string
+          x-stoplight:
+            id: h0q982x6khl8m
+          example: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+          description: The URL of the dog's picture.
+      required:
+        - id
+        - idSeller
+        - availableQuantity
+        - name
+        - breed
+        - genre
+        - price
+        - description
+        - dateOfBirth
+        - weight
+        - height
+        - width
+      x-examples:
+        Example 1:
+          id: 507f1f77bcf86cd799439011
+          idSeller: 147f1f77bcf86cd799439052
           availableQuantity: 5
           name: Admin Dog
           breed: Others
@@ -248,134 +373,65 @@ components:
           height: 60
           width: 50
           pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
-      properties:
-        id:
-          type: string
-          description: The ID of the dog.
-          example: 507f1f77bcf86cd799439011
-        sellerId:
-          type: string
-          description: The ID of the seller who is selling the dog.
-          example: 147f1f77bcf86cd799439052
-        availableQuantity:
-          type: integer
-          description: The number of available dogs for sale.
-          example: 5
-          minimum: 0
-        name:
-          type: string
-          description: The name of the dog.
-          example: Admin Dog
-        breed:
-          type: string
-          description: The breed of the dog.
-          example: Others
-        genre:
-          type: string
-          description: The gender of the dog.
-          enum:
-            - Male
-            - Female
-          example: Male
-        price:
-          type: number
-          description: The price of the dog.
-          example: 5000
-          minimum: 0
-        description:
-          type: string
-          description: A brief description of the dog.
-          example: Admin Dog.
-        dateOfBirth:
-          type: string
-          description: The dog's date of birth.
-          example: '2001-01-01'
-        weight:
-          type: number
-          description: The weight of the dog in kilograms.
-          example: 50
-          exclusiveMinimum: 0
-        height:
-          type: number
-          description: The height of the dog in centimeters.
-          example: 60
-          exclusiveMinimum: 0
-        width:
-          type: number
-          description: The width of the dog in centimeters.
-          example: 50
-          exclusiveMinimum: 0
-        pictureUrl:
-          type: string
-          description: The URL of the dog's picture.
-          example: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
-      required:
-        - id
-        - sellerId
-        - availableQuantity
-        - name
-        - breed
-        - genre
-        - price
-        - description
-        - dateOfBirth
-        - weight
-        - height
-        - width
     Pagination:
       title: Pagination
       x-stoplight:
-        id: oge7sn10idrio
+        id: 64zfy5pcancy5
       type: object
       description: General pagination model.
-      examples:
-        - first: 1
-          last: 3
-          previous: 1
-          next: 3
-          page: 1
-          isFirst: true
-          isLast: false
-          totalElements: 8
       properties:
         first:
           type: integer
+          x-stoplight:
+            id: heb7eei0hh7fx
           description: The first page in the pagination sequence.
           example: 1
           minimum: 1
         last:
           type: integer
+          x-stoplight:
+            id: 68whsvrf5ok5l
+          minimum: 1
           description: The last page in the pagination sequence.
           example: 50
-          minimum: 1
         previous:
           type: integer
+          x-stoplight:
+            id: hgirm55xdmoye
+          minimum: 1
           description: The previous page in the pagination sequence.
           example: 1
-          minimum: 1
         next:
           type: integer
-          description: The next page in the pagination sequence.
-          example: 3
+          x-stoplight:
+            id: qx5yhdw9d18tu
           minimum: 1
+          example: 3
+          description: The next page in the pagination sequence.
         page:
           type: integer
+          x-stoplight:
+            id: 1ift72adznaf6
           description: The current page in the pagination sequence.
           example: 2
           minimum: 1
         isFirst:
           type: boolean
+          x-stoplight:
+            id: ftrjo0wz342g9
           description: A flag indicating whether the current page is the first page in the pagination sequence.
-          example: false
         isLast:
           type: boolean
+          x-stoplight:
+            id: ojl34m66l7b5o
           description: A flag indicating whether the current page is the last page in the pagination sequence.
-          example: false
         totalElements:
           type: integer
-          description: The total number of elements in the paginated collection.
+          x-stoplight:
+            id: a6hrfqfbohs8a
           example: 8
           minimum: 0
+          description: The total number of elements in the paginated collection.
       required:
         - first
         - last
@@ -385,122 +441,62 @@ components:
         - isFirst
         - isLast
         - totalElements
-    BadRequestError400:
-      title: Bad Request Error - 400
+      x-examples:
+        Example 1:
+          first: 1
+          last: 50
+          previous: 1
+          next: 3
+          page: 2
+          isFirst: true
+          isLast: true
+          totalElements: 8
+    Error:
+      title: Error
       x-stoplight:
-        id: n1t1295qe1x2h
+        id: 8k3mafh7zjwxn
       type: object
-      description: Bad Request Error response model.
-      examples:
-        - code: ERR-002
-          message: Invalid request parameters.
-          details: Check the URL.
+      description: Error response model.
       properties:
         code:
           type: string
           x-stoplight:
-            id: q4mel22j4avl6
+            id: lklojt9c6cuin
           description: A code that represents the error.
           example: ERR-002
         message:
           type: string
           x-stoplight:
-            id: 0s3jkazahv81g
+            id: degp7mtulr1f8
           description: An error message.
           example: Invalid request parameters.
         details:
           type: string
           x-stoplight:
-            id: fhm72ww5529qp
+            id: yxce6c9kocxgd
+          description: Details about the error.
           example: Check the URL.
-          description: Details about the error.
-    UnauthorizedError401:
-      title: Unauthorized Error - 401
-      x-stoplight:
-        id: e7quxsnc45tqv
-      type: object
-      description: Unauthorized Error response model.
-      examples:
-        - code: ERR-001
-          message: Invalid input parameter.
-          details: The parameter 'page' must be a positive integer.
-      properties:
-        code:
-          type: string
-          x-stoplight:
-            id: q4mel22j4avl6
-          description: A code that represents the error.
-          example: ERR-002
-        message:
-          type: string
-          x-stoplight:
-            id: 0s3jkazahv81g
-          description: An error message.
-          example: Unauthorized.
-        details:
-          type: string
-          x-stoplight:
-            id: fhm72ww5529qp
-          example: Authentication credentials are missing or invalid.
-          description: Details about the error.
-    NotFoundError404:
-      title: Not Found - 404
-      x-stoplight:
-        id: 6ckztx5hgqphx
-      type: object
-      description: Not Found Error response model.
-      examples:
-        - code: ERR-004
+      required:
+        - code
+        - message
+        - details
+      x-examples:
+        example-error-400:
+          code: ERR-002
+          message: Invalid request parameters.
+          details: Check the URL.
+        example-error-401:
+          code: ERR-002
+          message: Unauthorized.
+          details: Authentication credentials are missing or invalid.
+        example-error-404:
+          code: ERR-004
           message: ID not Found.
           details: No dog was found with the ID specified.
-      properties:
-        code:
-          type: string
-          x-stoplight:
-            id: q4mel22j4avl6
-          description: A code that represents the error.
-          example: ERR-004
-        message:
-          type: string
-          x-stoplight:
-            id: 0s3jkazahv81g
-          description: An error message.
-          example: ID not Found.
-        details:
-          type: string
-          x-stoplight:
-            id: fhm72ww5529qp
-          example: No dog was found with the ID specified.
-          description: Details about the error.
-    InternalServerError500:
-      title: Internal Server Error - 500
-      x-stoplight:
-        id: sgsq5fav4i2du
-      type: object
-      description: Bad Request Error response model.
-      examples:
-        - code: ERR-500
+        example-error-500:
+          code: ERR-500
           message: Internal server error.
           details: There was a problem processing your request. Please try again later.
-      properties:
-        code:
-          type: string
-          x-stoplight:
-            id: q4mel22j4avl6
-          description: A code that represents the error.
-          example: ERR-500
-        message:
-          type: string
-          x-stoplight:
-            id: 0s3jkazahv81g
-          description: An error message.
-          example: Internal server error.
-        details:
-          type: string
-          x-stoplight:
-            id: fhm72ww5529qp
-          example: There was a problem processing your request. Please try again later.
-          description: Details about the error.
   securitySchemes:
     Token:
       type: http
