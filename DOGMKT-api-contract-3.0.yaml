@@ -156,6 +156,139 @@ paths:
           name: limit
           description: The maximum number of results to return in each request.
           required: true
+    post:
+      summary: Create a Dog
+      operationId: post-dog
+      responses:
+        '201':
+          description: A Dog was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+              examples:
+                Example 1:
+                  value:
+                    id: 507f1f77bcf86cd799439011
+                    idSeller: 147f1f77bcf86cd799439052
+                    availableQuantity: 5
+                    name: Admin Dog
+                    breed: Others
+                    genre: Male
+                    price: 5000
+                    description: Admin Dog.
+                    dateOfBirth: '2001-01-01'
+                    weight: 50
+                    height: 60
+                    width: 50
+                    pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+          headers:
+            Location:
+              schema:
+                type: string
+                example: 'http://localhost:3000/dogs/507f1f77bcf86cd799439011'
+              description: The URL of the newly created resource.
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No dog was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No dog was found with the ID specified.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      tags:
+        - Dogs
+      description: Create a Dog.
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateDog'
+            examples:
+              Example 1:
+                value:
+                  id: 507f1f77bcf86cd799439011
+                  idSeller: 147f1f77bcf86cd799439052
+                  availableQuantity: 5
+                  name: Admin Dog
+                  breed: Others
+                  genre: Male
+                  price: 5000
+                  description: Admin Dog.
+                  dateOfBirth: '2001-01-01'
+                  weight: 50
+                  height: 60
+                  width: 50
+                  pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+              Example 2 - Without pictureURL:
+                value:
+                  id: 507f1f77bcf86cd799439011
+                  idSeller: 147f1f77bcf86cd799439052
+                  availableQuantity: 5
+                  name: Admin Dog
+                  breed: Others
+                  genre: Male
+                  price: 5000
+                  description: Admin Dog.
+                  dateOfBirth: '2001-01-01'
+                  weight: 50
+                  height: 60
+                  width: 50
+        description: Dog object to be created.
   '/dogs/{idDog}':
     parameters:
       - schema:
@@ -377,38 +510,12 @@ paths:
         description: Dog object with updated values.
       tags:
         - Dogs
-    post:
-      summary: Create a Dog
-      operationId: post-dog
+    delete:
+      summary: Delete a Dog
+      operationId: delete-dog
       responses:
-        '201':
-          description: A Dog was successfully created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Dog'
-              examples:
-                Example 1:
-                  value:
-                    id: 507f1f77bcf86cd799439011
-                    idSeller: 147f1f77bcf86cd799439052
-                    availableQuantity: 5
-                    name: Admin Dog
-                    breed: Others
-                    genre: Male
-                    price: 5000
-                    description: Admin Dog.
-                    dateOfBirth: '2001-01-01'
-                    weight: 50
-                    height: 60
-                    width: 50
-                    pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
-          headers:
-            Location:
-              schema:
-                type: string
-                example: 'http://localhost:3000/dogs/507f1f77bcf86cd799439011'
-              description: The URL of the newly created resource.
+        '204':
+          description: The Dog was successfully deleted.
         '400':
           description: The request contains malformed data in parameters.
           content:
@@ -445,18 +552,6 @@ paths:
                     code: ERR-004
                     message: ID not Found.
                     details: No dog was found with the ID specified.
-        '422':
-          description: The request was well-formed but unable to be followed due to semantic errors.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-422:
-                  value:
-                    code: ERR-422
-                    message: The request was well-formed but unable to be followed due to semantic errors.
-                    details: Check the request body.
         '500':
           description: Internal Server Error.
           content:
@@ -469,47 +564,11 @@ paths:
                     code: ERR-500
                     message: Internal server error.
                     details: There was a problem processing your request. Please try again later.
-      tags:
-        - Dogs
-      description: Create a Dog.
+      description: Delete a Dog.
       security:
         - Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUpdateDog'
-            examples:
-              Example 1:
-                value:
-                  id: 507f1f77bcf86cd799439011
-                  idSeller: 147f1f77bcf86cd799439052
-                  availableQuantity: 5
-                  name: Admin Dog
-                  breed: Others
-                  genre: Male
-                  price: 5000
-                  description: Admin Dog.
-                  dateOfBirth: '2001-01-01'
-                  weight: 50
-                  height: 60
-                  width: 50
-                  pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
-              Example 2 - Without pictureURL:
-                value:
-                  id: 507f1f77bcf86cd799439011
-                  idSeller: 147f1f77bcf86cd799439052
-                  availableQuantity: 5
-                  name: Admin Dog
-                  breed: Others
-                  genre: Male
-                  price: 5000
-                  description: Admin Dog.
-                  dateOfBirth: '2001-01-01'
-                  weight: 50
-                  height: 60
-                  width: 50
-        description: Dog object to be created.
+      tags:
+        - Dogs
 components:
   schemas:
     Dog:
