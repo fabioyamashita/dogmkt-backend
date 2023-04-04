@@ -307,11 +307,14 @@ paths:
             application/json:
               schema:
                 type: object
+                description: The object result of the request.
                 properties:
                   data:
                     $ref: '#/components/schemas/Dog'
                     x-stoplight:
                       id: vk19lp1jwybyw
+                required:
+                  - data
               examples:
                 Example 1:
                   value:
@@ -569,6 +572,94 @@ paths:
         - Token: []
       tags:
         - Dogs
+  '/users/{idUser}':
+    parameters:
+      - schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name: idUser
+        in: path
+        required: true
+        description: ID of the user.
+    get:
+      summary: Get User by ID
+      tags:
+        - Users
+      responses:
+        '200':
+          description: A User was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The object result of the request.
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+                    x-stoplight:
+                      id: vk19lp1jwybyw
+                required:
+                  - data
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      name: Arnold Schwarzenegger
+                      email: arnold@gmail.com
+                      isSeller: true
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No user was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No user was found with the ID specified.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      operationId: get-userById
+      description: Retrieve a User.
+      security:
+        - Token: []
 components:
   schemas:
     Dog:
@@ -693,6 +784,45 @@ components:
         - height
         - width
         - pictureUrl
+    User:
+      title: User
+      x-stoplight:
+        id: lbumk8tbu85la
+      type: object
+      description: User model.
+      x-examples:
+        Example 1:
+          id: 507f1f77bcf86cd799439011
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          isSeller: true
+      properties:
+        id:
+          type: string
+          description: The ID of the user.
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: 'A flag indicating if the user is also a seller. If it is not provided, isSeller = false.'
+      required:
+        - id
+        - name
+        - email
+        - isSeller
     CreateUpdateDog:
       title: Create/Update Dog
       x-stoplight:
