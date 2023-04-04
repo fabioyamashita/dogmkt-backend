@@ -158,7 +158,7 @@ paths:
           required: true
     post:
       summary: Create a Dog
-      operationId: post-dog
+      operationId: post-dogs
       responses:
         '201':
           description: A Dog was successfully created.
@@ -245,11 +245,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateDog'
+              $ref: '#/components/schemas/CreateDog'
             examples:
               Example 1:
                 value:
-                  id: 507f1f77bcf86cd799439011
                   idSeller: 147f1f77bcf86cd799439052
                   availableQuantity: 5
                   name: Admin Dog
@@ -264,7 +263,6 @@ paths:
                   pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
               Example 2 - Without pictureURL:
                 value:
-                  id: 507f1f77bcf86cd799439011
                   idSeller: 147f1f77bcf86cd799439052
                   availableQuantity: 5
                   name: Admin Dog
@@ -467,7 +465,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateDog'
+              $ref: '#/components/schemas/UpdateDog'
             examples:
               Example 1:
                 value:
@@ -722,6 +720,93 @@ paths:
         description: User object to be created.
       tags:
         - Auth
+  /login:
+    post:
+      summary: Login
+      operationId: post-login
+      responses:
+        '200':
+          description: Logged in successfully.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Response body.
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: yfln8ougcur10
+                    description: JWT Token generated to be used in the application.
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                  user:
+                    $ref: '#/components/schemas/User'
+                    x-stoplight:
+                      id: q3hgeikigah60
+                required:
+                  - token
+                  - user
+              examples:
+                Example 1:
+                  value:
+                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                    user:
+                      id: 507f1f77bcf86cd799439011
+                      name: Arnold Schwarzenegger
+                      email: arnold@gmail.com
+                      isSeller: true
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      description: Login with username and password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+            examples:
+              Example 1:
+                value:
+                  email: arnold@gmail.com
+                  password: secretpassword123
+        description: Request body.
+      tags:
+        - Auth
+    parameters: []
 components:
   schemas:
     Dog:
@@ -944,12 +1029,153 @@ components:
         - email
         - password
         - passwordConfirm
-    CreateUpdateDog:
-      title: Create/Update Dog
+    Login:
+      title: Login
+      x-stoplight:
+        id: fipms0vpm5qrw
+      type: object
+      description: Login model.
+      x-examples:
+        Example 1:
+          email: arnold@gmail.com
+          password: secretpassword123
+      properties:
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        password:
+          type: string
+          x-stoplight:
+            id: 7fu85wlk7cbi1
+          description: The password of the user.
+          example: secretpassword123
+      required:
+        - email
+        - password
+    CreateDog:
+      title: Create Dog
       x-stoplight:
         id: oq3nnch40tulr
       type: object
-      description: Create/Update Dog model.
+      description: Create Dog model.
+      x-examples:
+        Example 1:
+          idSeller: 147f1f77bcf86cd799439052
+          availableQuantity: 5
+          name: Admin Dog
+          breed: Others
+          genre: Male
+          price: 5000
+          description: Admin Dog.
+          dateOfBirth: '2001-01-01'
+          weight: 50
+          height: 60
+          width: 50
+          pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+      properties:
+        idSeller:
+          type: string
+          x-stoplight:
+            id: qq3axudn3l9ra
+          example: 147f1f77bcf86cd799439052
+          description: The ID of the seller who is selling the dog.
+        availableQuantity:
+          type: integer
+          x-stoplight:
+            id: m6nwyqijr62ds
+          example: 5
+          minimum: 0
+          description: The number of available dogs for sale.
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Admin Dog
+          description: The name of the dog.
+        breed:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: Others
+          description: The breed of the dog.
+        genre:
+          type: string
+          x-stoplight:
+            id: bdzd2x5fms2nn
+          enum:
+            - Male
+            - Female
+          example: Male
+          description: The gender of the dog.
+        price:
+          type: number
+          x-stoplight:
+            id: jmeqj4qdne1c4
+          example: 5000
+          description: The price of the dog.
+        description:
+          type: string
+          x-stoplight:
+            id: j7r0prgsuivq6
+          example: Admin Dog.
+          description: A brief description of the dog.
+        dateOfBirth:
+          type: string
+          x-stoplight:
+            id: g3kre0wi9l493
+          example: '2001-01-01'
+          description: The dog's date of birth.
+        weight:
+          type: number
+          x-stoplight:
+            id: zit86if6q92m8
+          example: 50
+          minimum: 0
+          exclusiveMinimum: true
+          description: The weight of the dog in kilograms.
+        height:
+          type: number
+          x-stoplight:
+            id: lcg6aiocgsqxw
+          example: 60
+          minimum: 0
+          exclusiveMinimum: true
+          description: The height of the dog in centimeters.
+        width:
+          type: number
+          x-stoplight:
+            id: 7l3jvsu5925c4
+          example: 50
+          minimum: 0
+          exclusiveMinimum: true
+          description: The width of the dog in centimeters.
+        pictureUrl:
+          type: string
+          x-stoplight:
+            id: h0q982x6khl8m
+          example: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+          description: 'The URL of the dog''s picture. If it is not provided, a default image will be saved.'
+      required:
+        - idSeller
+        - availableQuantity
+        - name
+        - breed
+        - genre
+        - price
+        - description
+        - dateOfBirth
+        - weight
+        - height
+        - width
+    UpdateDog:
+      title: Update Dog
+      x-stoplight:
+        id: 0xj0gxvt3hwgv
+      type: object
+      description: Update Dog model.
       x-examples:
         Example 1:
           id: 507f1f77bcf86cd799439011
