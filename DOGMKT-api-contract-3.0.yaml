@@ -212,18 +212,6 @@ paths:
                     code: ERR-002
                     message: Unauthorized.
                     details: Authentication credentials are missing or invalid.
-        '404':
-          description: No dog was found with the ID specified.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-404:
-                  value:
-                    code: ERR-004
-                    message: ID not Found.
-                    details: No dog was found with the ID specified.
         '422':
           description: The request was well-formed but unable to be followed due to semantic errors.
           content:
@@ -660,6 +648,80 @@ paths:
       description: Retrieve a User.
       security:
         - Token: []
+  /signup:
+    post:
+      summary: Sign Up (Create a new User)
+      operationId: post-signup
+      responses:
+        '204':
+          description: The user was successfully created.
+          headers: {}
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      description: Sign Up (Create a new User).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+            examples:
+              Example 1:
+                value:
+                  name: Arnold Schwarzenegger
+                  email: arnold@gmail.com
+                  password: secretpassword123
+                  passwordConfirm: secretpassword123
+                  isSeller: true
+              Example 2 - isSeller = false:
+                value:
+                  name: Arnold Schwarzenegger
+                  email: arnold@gmail.com
+                  password: secretpassword123
+                  passwordConfirm: secretpassword123
+                  isSeller: false
+              Example 3 - isSeller = false (omitted):
+                value:
+                  name: Arnold Schwarzenegger
+                  email: arnold@gmail.com
+                  password: secretpassword123
+                  passwordConfirm: secretpassword123
+        description: User object to be created.
+      tags:
+        - Auth
 components:
   schemas:
     Dog:
@@ -817,12 +879,71 @@ components:
           type: boolean
           x-stoplight:
             id: qq3axudn3l9ra
-          description: 'A flag indicating if the user is also a seller. If it is not provided, isSeller = false.'
+          description: A flag indicating if the user is also a seller.
       required:
         - id
         - name
         - email
         - isSeller
+    SignUp:
+      title: Sign Up (Create User)
+      x-stoplight:
+        id: n1ndotbtn3c2b
+      type: object
+      description: Sign Up (Create User) model.
+      x-examples:
+        Example 1:
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+          isSeller: true
+        Example 2 - isSeller = false:
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+          isSeller: false
+        Example 3 - isSeller = false (omitted):
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        password:
+          type: string
+          x-stoplight:
+            id: 7fu85wlk7cbi1
+          description: The password of the user.
+          example: secretpassword123
+        passwordConfirm:
+          type: string
+          x-stoplight:
+            id: dhll31mdl8s4i
+          description: The password confirmation of the user.
+          example: secretpassword123
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: 'A flag indicating if the user is also a seller. If it is not provided, isSeller = false.'
+      required:
+        - name
+        - email
+        - password
+        - passwordConfirm
     CreateUpdateDog:
       title: Create/Update Dog
       x-stoplight:
