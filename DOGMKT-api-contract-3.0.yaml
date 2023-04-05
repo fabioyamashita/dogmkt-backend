@@ -372,9 +372,68 @@ paths:
         - Token: []
       tags:
         - Dogs
-    put:
+    delete:
+      summary: Delete a Dog
+      operationId: delete-dog
+      responses:
+        '204':
+          description: The Dog was successfully deleted.
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No dog was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No dog was found with the ID specified.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      description: Delete a Dog.
+      security:
+        - Token: []
+      tags:
+        - Dogs
+    patch:
       summary: Update a Dog
-      operationId: put-dog
+      operationId: patch-dog
       responses:
         '200':
           description: A Dog was successfully updated.
@@ -469,22 +528,9 @@ paths:
             examples:
               Example 1:
                 value:
-                  id: 507f1f77bcf86cd799439011
-                  idSeller: 147f1f77bcf86cd799439052
-                  availableQuantity: 5
-                  name: Admin Dog
-                  breed: Others
-                  genre: Male
                   price: 5000
-                  description: Admin Dog.
-                  dateOfBirth: '2001-01-01'
-                  weight: 50
-                  height: 60
-                  width: 50
-                  pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
-              Example 2 - Without pictureUrl:
+              Example 2:
                 value:
-                  id: 507f1f77bcf86cd799439011
                   idSeller: 147f1f77bcf86cd799439052
                   availableQuantity: 5
                   name: Admin Dog
@@ -497,65 +543,6 @@ paths:
                   height: 60
                   width: 50
         description: Dog object with updated values.
-      tags:
-        - Dogs
-    delete:
-      summary: Delete a Dog
-      operationId: delete-dog
-      responses:
-        '204':
-          description: The Dog was successfully deleted.
-        '400':
-          description: The request contains malformed data in parameters.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-400:
-                  value:
-                    code: ERR-002
-                    message: Invalid request parameters.
-                    details: Check the URL.
-        '401':
-          description: Bad or expired token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-401:
-                  value:
-                    code: ERR-002
-                    message: Unauthorized.
-                    details: Authentication credentials are missing or invalid.
-        '404':
-          description: No dog was found with the ID specified.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-404:
-                  value:
-                    code: ERR-004
-                    message: ID not Found.
-                    details: No dog was found with the ID specified.
-        '500':
-          description: Internal Server Error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                example-error-500:
-                  value:
-                    code: ERR-500
-                    message: Internal server error.
-                    details: There was a problem processing your request. Please try again later.
-      description: Delete a Dog.
-      security:
-        - Token: []
       tags:
         - Dogs
   '/users/{idUser}':
@@ -646,6 +633,102 @@ paths:
       description: Retrieve a User.
       security:
         - Token: []
+    patch:
+      summary: Update a User
+      operationId: patch-user
+      responses:
+        '200':
+          description: A User was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Example 1:
+                  value:
+                    id: 507f1f77bcf86cd799439011
+                    name: Arnold Schwarzenegger
+                    email: arnold@gmail.com
+                    isSeller: true
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No user was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No dog was found with the ID specified.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      tags:
+        - Users
+      description: Update a User.
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+            examples:
+              Example 1:
+                value:
+                  name: Arnold Schwarzenegger
+                  isSeller: true
+              Example 2:
+                value:
+                  isSeller: true
+        description: Request body.
   /signup:
     post:
       summary: Sign Up (Create a new User)
@@ -970,6 +1053,30 @@ components:
         - name
         - email
         - isSeller
+    UpdateUser:
+      title: Update User
+      x-stoplight:
+        id: hg4e3bc6mlkfo
+      type: object
+      description: Update User model.
+      x-examples:
+        Example 1:
+          name: Arnold Schwarzenegger
+          isSeller: true
+        Example 2:
+          isSeller: true
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: A flag indicating if the user is also a seller.
     SignUp:
       title: Sign Up (Create User)
       x-stoplight:
@@ -1178,7 +1285,6 @@ components:
       description: Update Dog model.
       x-examples:
         Example 1:
-          id: 507f1f77bcf86cd799439011
           idSeller: 147f1f77bcf86cd799439052
           availableQuantity: 5
           name: Admin Dog
@@ -1192,10 +1298,6 @@ components:
           width: 50
           pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
       properties:
-        id:
-          type: string
-          description: The ID of the dog.
-          example: 507f1f77bcf86cd799439011
         idSeller:
           type: string
           x-stoplight:
@@ -1278,19 +1380,6 @@ components:
             id: h0q982x6khl8m
           example: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
           description: 'The URL of the dog''s picture. If it is not provided, a default image will be saved.'
-      required:
-        - id
-        - idSeller
-        - availableQuantity
-        - name
-        - breed
-        - genre
-        - price
-        - description
-        - dateOfBirth
-        - weight
-        - height
-        - width
     Pagination:
       title: Pagination
       x-stoplight:
