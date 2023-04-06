@@ -890,6 +890,100 @@ paths:
       tags:
         - Auth
     parameters: []
+  '/carts/{idCart}':
+    parameters:
+      - schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name: idCart
+        in: path
+        required: true
+        description: ID of the cart.
+    get:
+      summary: Get Cart by ID
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: A Cart was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The object result of the request.
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Cart'
+                    x-stoplight:
+                      id: vk19lp1jwybyw
+                required:
+                  - data
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      idUser: 147f1f77bcf86cd799439052
+                      summaryPrice: 4500
+                      discountPrice: 500
+                      totalPrice: 5000
+                      dogs:
+                        - idDog: 507f1f77bcf86cd799439011
+                          quantity: 5
+                        - idDog: 507f1f77bcf86cd791215151
+                          quantity: 2
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No cart was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No cart was found with the ID specified.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      operationId: get-cartById
+      description: Retrieve a Cart.
+      security:
+        - Token: []
 components:
   schemas:
     Dog:
@@ -1014,154 +1108,6 @@ components:
         - height
         - width
         - pictureUrl
-    User:
-      title: User
-      x-stoplight:
-        id: lbumk8tbu85la
-      type: object
-      description: User model.
-      x-examples:
-        Example 1:
-          id: 507f1f77bcf86cd799439011
-          name: Arnold Schwarzenegger
-          email: arnold@gmail.com
-          isSeller: true
-      properties:
-        id:
-          type: string
-          description: The ID of the user.
-          example: 507f1f77bcf86cd799439011
-        name:
-          type: string
-          x-stoplight:
-            id: vin7eu9ol1jxt
-          example: Arnold Schwarzenegger
-          description: The name of the user.
-        email:
-          type: string
-          x-stoplight:
-            id: g0xm9127q2un1
-          example: arnold@gmail.com
-          description: The email of the user.
-        isSeller:
-          type: boolean
-          x-stoplight:
-            id: qq3axudn3l9ra
-          description: A flag indicating if the user is also a seller.
-      required:
-        - id
-        - name
-        - email
-        - isSeller
-    UpdateUser:
-      title: Update User
-      x-stoplight:
-        id: hg4e3bc6mlkfo
-      type: object
-      description: Update User model.
-      x-examples:
-        Example 1:
-          name: Arnold Schwarzenegger
-          isSeller: true
-        Example 2:
-          isSeller: true
-      properties:
-        name:
-          type: string
-          x-stoplight:
-            id: vin7eu9ol1jxt
-          example: Arnold Schwarzenegger
-          description: The name of the user.
-        isSeller:
-          type: boolean
-          x-stoplight:
-            id: qq3axudn3l9ra
-          description: A flag indicating if the user is also a seller.
-    SignUp:
-      title: Sign Up (Create User)
-      x-stoplight:
-        id: n1ndotbtn3c2b
-      type: object
-      description: Sign Up (Create User) model.
-      x-examples:
-        Example 1:
-          name: Arnold Schwarzenegger
-          email: arnold@gmail.com
-          password: secretpassword123
-          passwordConfirm: secretpassword123
-          isSeller: true
-        Example 2 - isSeller = false:
-          name: Arnold Schwarzenegger
-          email: arnold@gmail.com
-          password: secretpassword123
-          passwordConfirm: secretpassword123
-          isSeller: false
-        Example 3 - isSeller = false (omitted):
-          name: Arnold Schwarzenegger
-          email: arnold@gmail.com
-          password: secretpassword123
-          passwordConfirm: secretpassword123
-      properties:
-        name:
-          type: string
-          x-stoplight:
-            id: vin7eu9ol1jxt
-          example: Arnold Schwarzenegger
-          description: The name of the user.
-        email:
-          type: string
-          x-stoplight:
-            id: g0xm9127q2un1
-          example: arnold@gmail.com
-          description: The email of the user.
-        password:
-          type: string
-          x-stoplight:
-            id: 7fu85wlk7cbi1
-          description: The password of the user.
-          example: secretpassword123
-        passwordConfirm:
-          type: string
-          x-stoplight:
-            id: dhll31mdl8s4i
-          description: The password confirmation of the user.
-          example: secretpassword123
-        isSeller:
-          type: boolean
-          x-stoplight:
-            id: qq3axudn3l9ra
-          description: 'A flag indicating if the user is also a seller. If it is not provided, isSeller = false.'
-      required:
-        - name
-        - email
-        - password
-        - passwordConfirm
-    Login:
-      title: Login
-      x-stoplight:
-        id: fipms0vpm5qrw
-      type: object
-      description: Login model.
-      x-examples:
-        Example 1:
-          email: arnold@gmail.com
-          password: secretpassword123
-      properties:
-        email:
-          type: string
-          x-stoplight:
-            id: g0xm9127q2un1
-          example: arnold@gmail.com
-          description: The email of the user.
-        password:
-          type: string
-          x-stoplight:
-            id: 7fu85wlk7cbi1
-          description: The password of the user.
-          example: secretpassword123
-      required:
-        - email
-        - password
     CreateDog:
       title: Create Dog
       x-stoplight:
@@ -1380,6 +1326,244 @@ components:
             id: h0q982x6khl8m
           example: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
           description: 'The URL of the dog''s picture. If it is not provided, a default image will be saved.'
+    Cart:
+      title: Cart
+      x-stoplight:
+        id: fbb326gfmzghg
+      type: object
+      description: Cart model.
+      x-examples:
+        Example 1:
+          id: 507f1f77bcf86cd799439011
+          idUser: 147f1f77bcf86cd799439052
+          summaryPrice: 4500
+          discountPrice: 500
+          totalPrice: 5000
+          dogs:
+            - idDog: 507f1f77bcf86cd799439011
+              quantity: 5
+            - idDog: 507f1f77bcf86cfadafafaf1
+              quantity: 1
+      properties:
+        id:
+          type: string
+          description: The ID of the cart.
+          example: 507f1f77bcf86cd799439011
+        idUser:
+          type: string
+          x-stoplight:
+            id: qq3axudn3l9ra
+          example: 147f1f77bcf86cd799439052
+          description: The ID of the user.
+        summaryPrice:
+          type: number
+          x-stoplight:
+            id: m6nwyqijr62ds
+          example: 4500
+          description: The summary of the cart (totalPrice - discountPrice).
+        discountPrice:
+          type: number
+          x-stoplight:
+            id: pnejv11szhive
+          description: The total discount of the cart.
+          example: 500
+        totalPrice:
+          type: number
+          x-stoplight:
+            id: 2urxenqt9b6z3
+          example: 5000
+          description: The total price of the cart.
+        dogs:
+          x-stoplight:
+            id: a0q1c7vbh57vb
+          type: array
+          description: The dogs added to cart.
+          items:
+            $ref: '#/components/schemas/DogsCart'
+            x-stoplight:
+              id: s0ixc2hw8x7xi
+      required:
+        - id
+        - idUser
+        - summaryPrice
+        - discountPrice
+        - totalPrice
+        - dogs
+    DogsCart:
+      title: DogsCart
+      x-stoplight:
+        id: wcwyqs0shu5ag
+      type: object
+      description: Dogs in cart model.
+      x-examples:
+        Example 1:
+          idDog: 507f1f77bcf86cd799439011
+          quantity: 5
+      properties:
+        idDog:
+          type: string
+          description: The ID of the dog.
+          example: 507f1f77bcf86cd799439011
+          x-stoplight:
+            id: 98s7eggie3eb6
+        quantity:
+          type: number
+          x-stoplight:
+            id: drn24rmc6utsz
+          description: The quantity of the specified dog in cart.
+          example: 5
+          minimum: 1
+      required:
+        - idDog
+        - quantity
+    User:
+      title: User
+      x-stoplight:
+        id: lbumk8tbu85la
+      type: object
+      description: User model.
+      x-examples:
+        Example 1:
+          id: 507f1f77bcf86cd799439011
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          isSeller: true
+      properties:
+        id:
+          type: string
+          description: The ID of the user.
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: A flag indicating if the user is also a seller.
+      required:
+        - id
+        - name
+        - email
+        - isSeller
+    UpdateUser:
+      title: Update User
+      x-stoplight:
+        id: hg4e3bc6mlkfo
+      type: object
+      description: Update User model.
+      x-examples:
+        Example 1:
+          name: Arnold Schwarzenegger
+          isSeller: true
+        Example 2:
+          isSeller: true
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: A flag indicating if the user is also a seller.
+    SignUp:
+      title: Sign Up (Create User)
+      x-stoplight:
+        id: n1ndotbtn3c2b
+      type: object
+      description: Sign Up (Create User) model.
+      x-examples:
+        Example 1:
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+          isSeller: true
+        Example 2 - isSeller = false:
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+          isSeller: false
+        Example 3 - isSeller = false (omitted):
+          name: Arnold Schwarzenegger
+          email: arnold@gmail.com
+          password: secretpassword123
+          passwordConfirm: secretpassword123
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: vin7eu9ol1jxt
+          example: Arnold Schwarzenegger
+          description: The name of the user.
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        password:
+          type: string
+          x-stoplight:
+            id: 7fu85wlk7cbi1
+          description: The password of the user.
+          example: secretpassword123
+        passwordConfirm:
+          type: string
+          x-stoplight:
+            id: dhll31mdl8s4i
+          description: The password confirmation of the user.
+          example: secretpassword123
+        isSeller:
+          type: boolean
+          x-stoplight:
+            id: qq3axudn3l9ra
+          description: 'A flag indicating if the user is also a seller. If it is not provided, isSeller = false.'
+      required:
+        - name
+        - email
+        - password
+        - passwordConfirm
+    Login:
+      title: Login
+      x-stoplight:
+        id: fipms0vpm5qrw
+      type: object
+      description: Login model.
+      x-examples:
+        Example 1:
+          email: arnold@gmail.com
+          password: secretpassword123
+      properties:
+        email:
+          type: string
+          x-stoplight:
+            id: g0xm9127q2un1
+          example: arnold@gmail.com
+          description: The email of the user.
+        password:
+          type: string
+          x-stoplight:
+            id: 7fu85wlk7cbi1
+          description: The password of the user.
+          example: secretpassword123
+      required:
+        - email
+        - password
     Pagination:
       title: Pagination
       x-stoplight:
