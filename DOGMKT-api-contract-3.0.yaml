@@ -165,23 +165,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Dog'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Dog'
+                    x-stoplight:
+                      id: xepjj9rum38vs
               examples:
                 Example 1:
                   value:
-                    id: 507f1f77bcf86cd799439011
-                    idSeller: 147f1f77bcf86cd799439052
-                    availableQuantity: 5
-                    name: Admin Dog
-                    breed: Others
-                    genre: Male
-                    price: 5000
-                    description: Admin Dog.
-                    dateOfBirth: '2001-01-01'
-                    weight: 50
-                    height: 60
-                    width: 50
-                    pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      idSeller: 147f1f77bcf86cd799439052
+                      availableQuantity: 5
+                      name: Admin Dog
+                      breed: Others
+                      genre: Male
+                      price: 5000
+                      description: Admin Dog.
+                      dateOfBirth: '2001-01-01'
+                      weight: 50
+                      height: 60
+                      width: 50
+                      pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
           headers:
             Location:
               schema:
@@ -440,23 +446,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Dog'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Dog'
+                    x-stoplight:
+                      id: 88l561gjndr0s
               examples:
                 Example 1:
                   value:
-                    id: 507f1f77bcf86cd799439011
-                    idSeller: 147f1f77bcf86cd799439052
-                    availableQuantity: 5
-                    name: Admin Dog
-                    breed: Others
-                    genre: Male
-                    price: 5000
-                    description: Admin Dog.
-                    dateOfBirth: '2001-01-01'
-                    weight: 50
-                    height: 60
-                    width: 50
-                    pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      idSeller: 147f1f77bcf86cd799439052
+                      availableQuantity: 5
+                      name: Admin Dog
+                      breed: Others
+                      genre: Male
+                      price: 5000
+                      description: Admin Dog.
+                      dateOfBirth: '2001-01-01'
+                      weight: 50
+                      height: 60
+                      width: 50
+                      pictureUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80'
         '400':
           description: The request contains malformed data in parameters.
           content:
@@ -642,14 +654,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+                    x-stoplight:
+                      id: dqdsbhxdiiy1i
               examples:
                 Example 1:
                   value:
-                    id: 507f1f77bcf86cd799439011
-                    name: Arnold Schwarzenegger
-                    email: arnold@gmail.com
-                    isSeller: true
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      name: Arnold Schwarzenegger
+                      email: arnold@gmail.com
+                      isSeller: true
         '400':
           description: The request contains malformed data in parameters.
           content:
@@ -984,6 +1002,120 @@ paths:
       description: Retrieve a Cart.
       security:
         - Token: []
+  '/carts/{idCart}/dogs':
+    parameters:
+      - schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name: idCart
+        in: path
+        required: true
+        description: ID of the cart.
+    put:
+      summary: Update/Add Dog to cart
+      operationId: put-carts-dogs
+      responses:
+        '200':
+          description: Dog was successfully updated/added to cart.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Cart'
+                    x-stoplight:
+                      id: da0cb100pjakv
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      idUser: 147f1f77bcf86cd799439052
+                      summaryPrice: 4500
+                      discountPrice: 500
+                      totalPrice: 5000
+                      dogs:
+                        - idDog: 507f1f77bcf86cd799439011
+                          quantity: 5
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No cart was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No dog was found with the ID specified.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+        '':
+          description: ''
+      description: Update/Add Dog to cart.
+      tags:
+        - Carts
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DogsCart'
+            examples:
+              Example 1:
+                value:
+                  idDog: 507f1f77bcf86cd799439011
+                  quantity: 2
+        description: Request body.
 components:
   schemas:
     Dog:
