@@ -1098,8 +1098,6 @@ paths:
                     code: ERR-500
                     message: Internal server error.
                     details: There was a problem processing your request. Please try again later.
-        '':
-          description: ''
       description: Update/Add Dog to cart.
       tags:
         - Carts
