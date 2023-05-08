@@ -447,11 +447,12 @@ paths:
             application/json:
               schema:
                 type: object
+                description: Updated Dog Info.
                 properties:
                   data:
                     $ref: '#/components/schemas/Dog'
-                    x-stoplight:
-                      id: 88l561gjndr0s
+                required:
+                  - data
               examples:
                 Example 1:
                   value:
@@ -655,11 +656,12 @@ paths:
             application/json:
               schema:
                 type: object
+                description: Updated User info.
                 properties:
                   data:
                     $ref: '#/components/schemas/User'
-                    x-stoplight:
-                      id: dqdsbhxdiiy1i
+                required:
+                  - data
               examples:
                 Example 1:
                   value:
@@ -1021,11 +1023,12 @@ paths:
             application/json:
               schema:
                 type: object
+                description: Updated Cart Info.
                 properties:
                   data:
                     $ref: '#/components/schemas/Cart'
-                    x-stoplight:
-                      id: da0cb100pjakv
+                required:
+                  - data
               examples:
                 Example 1:
                   value:
