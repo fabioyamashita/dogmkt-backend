@@ -1117,6 +1117,98 @@ paths:
                   idDog: 507f1f77bcf86cd799439011
                   quantity: 2
         description: Request body.
+  '/purchases/{idPurchase}':
+    get:
+      summary: Get Purchase by ID
+      tags:
+        - Purchases
+      responses:
+        '200':
+          description: A Purchase was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The object result of the request.
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Purchase'
+                required:
+                  - data
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      id: 507f1f77bcf86cd799439011
+                      idUser: 457f1f77bcf86cd799439015
+                      date: '2023-05-23'
+                      summaryPrice: 4500
+                      discountPrice: 500
+                      totalPrice: 5000
+                      dogs:
+                        - idDog: 507f1f77bcf86cd799439011
+                          quantity: 5
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '404':
+          description: No purchase was found with the ID specified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-404:
+                  value:
+                    code: ERR-004
+                    message: ID not Found.
+                    details: No purchase was found with the ID specified.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      operationId: get-purchases
+      description: Retrieve a purchase.
+      parameters: []
+      security:
+        - Token: []
+    parameters:
+      - schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name: idPurchase
+        in: path
+        required: true
+        description: ID of the purchase.
 components:
   schemas:
     Dog:
@@ -1825,10 +1917,80 @@ components:
           code: ERR-422
           message: The request was well-formed but unable to be followed due to semantic errors.
           details: Check the request body.
+    Purchase:
+      title: Purchase
+      x-stoplight:
+        id: zc3i86qcfnf49
+      type: object
+      description: Purchase model.
+      x-examples:
+        Example 1:
+          id: 507f1f77bcf86cd799439011
+          idUser: 457f1f77bcf86cd799439015
+          date: '2023-05-23'
+          summaryPrice: 4500
+          discountPrice: 500
+          totalPrice: 5000
+          dogs:
+            - idDog: 507f1f77bcf86cd799439011
+              quantity: 5
+      properties:
+        id:
+          type: string
+          description: The ID of the purchase.
+          example: 507f1f77bcf86cd799439011
+        idUser:
+          type: string
+          description: The ID of the user.
+          example: 457f1f77bcf86cd799439015
+          x-stoplight:
+            id: fz3orem04w36d
+        date:
+          type: string
+          x-stoplight:
+            id: 8lkw00hpc9wiq
+          description: Date of the purchase (YYYY-MM-DD).
+          example: '2023-05-22'
+          format: date
+        summaryPrice:
+          type: number
+          x-stoplight:
+            id: 5998rtc3pwe5q
+          example: 4500
+          description: The summary of the cart (totalPrice - discountPrice).
+        discountPrice:
+          type: number
+          x-stoplight:
+            id: weiuehbrx4pom
+          description: The total discount of the cart.
+          example: 500
+        totalPrice:
+          type: number
+          x-stoplight:
+            id: m1nyjky0uvdrv
+          example: 5000
+          description: The total price of the cart.
+        dogs:
+          x-stoplight:
+            id: wf31sa0lqvsf5
+          type: array
+          description: The dogs added to cart.
+          items:
+            $ref: '#/components/schemas/DogsCart'
+      required:
+        - id
+        - idUser
+        - date
+        - summaryPrice
+        - discountPrice
+        - totalPrice
+        - dogs
   securitySchemes:
     Token:
       type: http
       scheme: bearer
       description: Authorization Token.
+  examples: {}
+  requestBodies: {}
 tags:
   - name: DOGMKT
