@@ -1328,6 +1328,88 @@ paths:
           required: true
       operationId: get-purchases-filter
       description: Retrieve purchases by a filter.
+    post:
+      summary: Create a purchase
+      operationId: post-purchases
+      responses:
+        '201':
+          description: The Purchase was successfully created.
+          content: {}
+          headers:
+            Location:
+              schema:
+                type: string
+                example: 'http://localhost:3000/purchases/507f1f77bcf86cd799439011'
+              description: The URL of the newly created purchase.
+        '400':
+          description: The request contains malformed data in parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-400:
+                  value:
+                    code: ERR-002
+                    message: Invalid request parameters.
+                    details: Check the URL.
+        '401':
+          description: Bad or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-401:
+                  value:
+                    code: ERR-002
+                    message: Unauthorized.
+                    details: Authentication credentials are missing or invalid.
+        '422':
+          description: The request was well-formed but unable to be followed due to semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-422:
+                  value:
+                    code: ERR-422
+                    message: The request was well-formed but unable to be followed due to semantic errors.
+                    details: Check the request body.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-error-500:
+                  value:
+                    code: ERR-500
+                    message: Internal server error.
+                    details: There was a problem processing your request. Please try again later.
+      description: Create a purchase.
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePurchaseRequestModel'
+            examples:
+              Example 1:
+                value:
+                  idUser: 457f1f77bcf86cd799439015
+                  summaryPrice: 4500
+                  discountPrice: 500
+                  totalPrice: 5000
+                  dogs:
+                    - idDog: 507f1f77bcf86cd799439011
+                      quantity: 5
+        description: Create a purchase request body.
+      tags:
+        - Purchases
 components:
   schemas:
     Dog:
