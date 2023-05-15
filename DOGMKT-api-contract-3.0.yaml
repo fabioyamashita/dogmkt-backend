@@ -9,7 +9,7 @@ info:
     name: Fabio Yamashita
     email: fabioyamashita10@gmail.com
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'http://localhost:3000/api/v1'
     description: Local
 paths:
   /dogs:

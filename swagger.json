@@ -1,0 +1,3281 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "0q7ldf7ano4yc"
+  },
+  "info": {
+    "title": "DOGMKT API",
+    "version": "1.0",
+    "description": "DOGMKT API Contract for back-end project of the DOGMKT website.",
+    "contact": {
+      "name": "Fabio Yamashita",
+      "email": "fabioyamashita10@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local"
+    }
+  ],
+  "paths": {
+    "/dogs": {
+      "get": {
+        "summary": "Get Dogs in Sale",
+        "tags": [
+          "Dogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Dogs was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "x-stoplight": {
+                        "id": "i5r755rnq9e09"
+                      },
+                      "type": "array",
+                      "description": "Dog Collection retrieved.",
+                      "items": {
+                        "$ref": "#/components/schemas/Dog",
+                        "x-stoplight": {
+                          "id": "ji0exgkvs455c"
+                        }
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination",
+                      "x-stoplight": {
+                        "id": "nv6acu2u954sa"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": "507f1f77bcf86cd799439011",
+                          "idSeller": "147f1f77bcf86cd799439052",
+                          "availableQuantity": 5,
+                          "name": "Admin Dog",
+                          "breed": "Others",
+                          "genre": "Male",
+                          "price": 5000,
+                          "description": "Admin Dog.",
+                          "dateOfBirth": "2001-01-01",
+                          "weight": 50,
+                          "height": 60,
+                          "width": 50,
+                          "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                        }
+                      ],
+                      "pagination": {
+                        "first": 1,
+                        "last": 50,
+                        "previous": 1,
+                        "next": 3,
+                        "page": 2,
+                        "isFirst": true,
+                        "isLast": true,
+                        "totalElements": 8
+                      }
+                    }
+                  },
+                  "Example 2": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": "507f1f77bcf86cd799439011",
+                          "idSeller": "147f1f77bcf86cd799439052",
+                          "availableQuantity": 5,
+                          "name": "Admin Dog",
+                          "breed": "Others",
+                          "genre": "Male",
+                          "price": 5210.25,
+                          "description": "Admin Dog.",
+                          "dateOfBirth": "2001-01-01",
+                          "weight": 50.5,
+                          "height": 60.6,
+                          "width": 50.9,
+                          "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                        }
+                      ],
+                      "pagination": {
+                        "first": 1,
+                        "last": 50,
+                        "previous": 5,
+                        "next": 7,
+                        "page": 6,
+                        "isFirst": false,
+                        "isLast": false,
+                        "totalElements": 8
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-dogs",
+        "description": "Retrieve a collection of Dogs in sale.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "507f1f77bcf86cd799439011"
+            },
+            "in": "query",
+            "name": "idSeller",
+            "description": "ID of the seller to filter the list of dogs."
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "example": 5,
+              "minimum": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "The page number of the results to retrieve.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "example": 25,
+              "minimum": 1
+            },
+            "in": "query",
+            "name": "limit",
+            "description": "The maximum number of results to return in each request.",
+            "required": true
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a Dog",
+        "operationId": "post-dogs",
+        "responses": {
+          "201": {
+            "description": "A Dog was successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Dog",
+                      "x-stoplight": {
+                        "id": "xepjj9rum38vs"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idSeller": "147f1f77bcf86cd799439052",
+                        "availableQuantity": 5,
+                        "name": "Admin Dog",
+                        "breed": "Others",
+                        "genre": "Male",
+                        "price": 5000,
+                        "description": "Admin Dog.",
+                        "dateOfBirth": "2001-01-01",
+                        "weight": 50,
+                        "height": 60,
+                        "width": 50,
+                        "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "example": "http://localhost:3000/dogs/507f1f77bcf86cd799439011"
+                },
+                "description": "The URL of the newly created resource."
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Dogs"
+        ],
+        "description": "Create a Dog.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDog"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "idSeller": "147f1f77bcf86cd799439052",
+                    "availableQuantity": 5,
+                    "name": "Admin Dog",
+                    "breed": "Others",
+                    "genre": "Male",
+                    "price": 5000,
+                    "description": "Admin Dog.",
+                    "dateOfBirth": "2001-01-01",
+                    "weight": 50,
+                    "height": 60,
+                    "width": 50,
+                    "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                  }
+                },
+                "Example 2 - Without pictureURL": {
+                  "value": {
+                    "idSeller": "147f1f77bcf86cd799439052",
+                    "availableQuantity": 5,
+                    "name": "Admin Dog",
+                    "breed": "Others",
+                    "genre": "Male",
+                    "price": 5000,
+                    "description": "Admin Dog.",
+                    "dateOfBirth": "2001-01-01",
+                    "weight": 50,
+                    "height": 60,
+                    "width": 50
+                  }
+                }
+              }
+            }
+          },
+          "description": "Dog object to be created."
+        }
+      }
+    },
+    "/dogs/{idDog}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": "idDog",
+          "in": "path",
+          "required": true,
+          "description": "ID of the dog."
+        }
+      ],
+      "get": {
+        "summary": "Get Dog by ID",
+        "responses": {
+          "200": {
+            "description": "A Dog was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Dog",
+                      "x-stoplight": {
+                        "id": "vk19lp1jwybyw"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idSeller": "147f1f77bcf86cd799439052",
+                        "availableQuantity": 5,
+                        "name": "Admin Dog",
+                        "breed": "Others",
+                        "genre": "Male",
+                        "price": 5000,
+                        "description": "Admin Dog.",
+                        "dateOfBirth": "2001-01-01",
+                        "weight": 50,
+                        "height": 60,
+                        "width": 50,
+                        "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dog was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No dog was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-dogbyId",
+        "description": "Retrieve a Dog in sale.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "tags": [
+          "Dogs"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a Dog",
+        "operationId": "delete-dog",
+        "responses": {
+          "204": {
+            "description": "The Dog was successfully deleted."
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dog was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No dog was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete a Dog.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "tags": [
+          "Dogs"
+        ]
+      },
+      "patch": {
+        "summary": "Update a Dog",
+        "operationId": "patch-dog",
+        "responses": {
+          "200": {
+            "description": "A Dog was successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Updated Dog Info.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Dog"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idSeller": "147f1f77bcf86cd799439052",
+                        "availableQuantity": 5,
+                        "name": "Admin Dog",
+                        "breed": "Others",
+                        "genre": "Male",
+                        "price": 5000,
+                        "description": "Admin Dog.",
+                        "dateOfBirth": "2001-01-01",
+                        "weight": 50,
+                        "height": 60,
+                        "width": 50,
+                        "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dog was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No dog was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "description": "Update a Dog in sale.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDog"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "price": 5000
+                  }
+                },
+                "Example 2": {
+                  "value": {
+                    "idSeller": "147f1f77bcf86cd799439052",
+                    "availableQuantity": 5,
+                    "name": "Admin Dog",
+                    "breed": "Others",
+                    "genre": "Male",
+                    "price": 5000,
+                    "description": "Admin Dog.",
+                    "dateOfBirth": "2001-01-01",
+                    "weight": 50,
+                    "height": 60,
+                    "width": 50
+                  }
+                }
+              }
+            }
+          },
+          "description": "Dog object with updated values."
+        },
+        "tags": [
+          "Dogs"
+        ]
+      }
+    },
+    "/users/{idUser}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": "idUser",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user."
+        }
+      ],
+      "get": {
+        "summary": "Get User by ID",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "A User was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/User",
+                      "x-stoplight": {
+                        "id": "vk19lp1jwybyw"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "name": "Arnold Schwarzenegger",
+                        "email": "arnold@gmail.com",
+                        "isSeller": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No user was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No user was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-userById",
+        "description": "Retrieve a User.",
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update a User",
+        "operationId": "patch-user",
+        "responses": {
+          "200": {
+            "description": "A User was successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Updated User info.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "name": "Arnold Schwarzenegger",
+                        "email": "arnold@gmail.com",
+                        "isSeller": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No user was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No dog was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "description": "Update a User.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUser"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "name": "Arnold Schwarzenegger",
+                    "isSeller": true
+                  }
+                },
+                "Example 2": {
+                  "value": {
+                    "isSeller": true
+                  }
+                }
+              }
+            }
+          },
+          "description": "Request body."
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "summary": "Sign Up (Create a new User)",
+        "operationId": "post-signup",
+        "responses": {
+          "204": {
+            "description": "The user was successfully created.",
+            "headers": {}
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Sign Up (Create a new User).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUp"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "name": "Arnold Schwarzenegger",
+                    "email": "arnold@gmail.com",
+                    "password": "secretpassword123",
+                    "passwordConfirm": "secretpassword123",
+                    "isSeller": true
+                  }
+                },
+                "Example 2 - isSeller = false": {
+                  "value": {
+                    "name": "Arnold Schwarzenegger",
+                    "email": "arnold@gmail.com",
+                    "password": "secretpassword123",
+                    "passwordConfirm": "secretpassword123",
+                    "isSeller": false
+                  }
+                },
+                "Example 3 - isSeller = false (omitted)": {
+                  "value": {
+                    "name": "Arnold Schwarzenegger",
+                    "email": "arnold@gmail.com",
+                    "password": "secretpassword123",
+                    "passwordConfirm": "secretpassword123"
+                  }
+                }
+              }
+            }
+          },
+          "description": "User object to be created."
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "post-login",
+        "responses": {
+          "200": {
+            "description": "Logged in successfully.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response body.",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "x-stoplight": {
+                        "id": "wf0njigpz6g04"
+                      },
+                      "description": "Data Envelope.",
+                      "required": [
+                        "token",
+                        "user"
+                      ],
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "x-stoplight": {
+                            "id": "jesu4sfuecgj8"
+                          },
+                          "description": "JWT Token generated to be used in the application.",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                        "user": {
+                          "id": "507f1f77bcf86cd799439011",
+                          "name": "Arnold Schwarzenegger",
+                          "email": "arnold@gmail.com",
+                          "isSeller": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Login with username and password.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "email": "arnold@gmail.com",
+                    "password": "secretpassword123"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Request body."
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "parameters": []
+    },
+    "/carts/{idCart}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": "idCart",
+          "in": "path",
+          "required": true,
+          "description": "ID of the cart."
+        }
+      ],
+      "get": {
+        "summary": "Get Cart by ID",
+        "tags": [
+          "Carts"
+        ],
+        "responses": {
+          "200": {
+            "description": "A Cart was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Cart",
+                      "x-stoplight": {
+                        "id": "vk19lp1jwybyw"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idUser": "147f1f77bcf86cd799439052",
+                        "summaryPrice": 4500,
+                        "discountPrice": 500,
+                        "totalPrice": 5000,
+                        "dogs": [
+                          {
+                            "idDog": "507f1f77bcf86cd799439011",
+                            "quantity": 5
+                          },
+                          {
+                            "idDog": "507f1f77bcf86cd791215151",
+                            "quantity": 2
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No cart was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No cart was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-cartById",
+        "description": "Retrieve a Cart.",
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    },
+    "/carts/{idCart}/dogs": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": "idCart",
+          "in": "path",
+          "required": true,
+          "description": "ID of the cart."
+        }
+      ],
+      "put": {
+        "summary": "Update/Add Dog to cart",
+        "operationId": "put-carts-dogs",
+        "responses": {
+          "200": {
+            "description": "Dog was successfully updated/added to cart.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Updated Cart Info.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Cart"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idUser": "147f1f77bcf86cd799439052",
+                        "summaryPrice": 4500,
+                        "discountPrice": 500,
+                        "totalPrice": 5000,
+                        "dogs": [
+                          {
+                            "idDog": "507f1f77bcf86cd799439011",
+                            "quantity": 5
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No cart was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No dog was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Update/Add Dog to cart.",
+        "tags": [
+          "Carts"
+        ],
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DogsCart"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "idDog": "507f1f77bcf86cd799439011",
+                    "quantity": 2
+                  }
+                }
+              }
+            }
+          },
+          "description": "Request body."
+        }
+      }
+    },
+    "/purchases/{idPurchase}": {
+      "get": {
+        "summary": "Get Purchase by ID",
+        "tags": [
+          "Purchases"
+        ],
+        "responses": {
+          "200": {
+            "description": "A Purchase was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Purchase"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": {
+                        "id": "507f1f77bcf86cd799439011",
+                        "idUser": "457f1f77bcf86cd799439015",
+                        "date": "2023-04-23T18:25:43.511Z",
+                        "summaryPrice": 4500,
+                        "discountPrice": 500,
+                        "totalPrice": 5000,
+                        "dogs": [
+                          {
+                            "idDog": "507f1f77bcf86cd799439011",
+                            "quantity": 5
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No purchase was found with the ID specified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-404": {
+                    "value": {
+                      "code": "ERR-004",
+                      "message": "ID not Found.",
+                      "details": "No purchase was found with the ID specified."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-purchases",
+        "description": "Retrieve a purchase.",
+        "parameters": [],
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": "idPurchase",
+          "in": "path",
+          "required": true,
+          "description": "ID of the purchase."
+        }
+      ]
+    },
+    "/purchases": {
+      "get": {
+        "summary": "Get Purchases filtering",
+        "tags": [
+          "Purchases"
+        ],
+        "responses": {
+          "200": {
+            "description": "The Purchases were successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The object result of the request.",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "x-stoplight": {
+                        "id": "3eah7thrdsg8h"
+                      },
+                      "description": "List of the purchases retrieved.",
+                      "items": {
+                        "$ref": "#/components/schemas/Purchase"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": "507f1f77bcf86cd799439011",
+                          "idUser": "457f1f77bcf86cd799439015",
+                          "date": "2023-04-23T18:25:43.511Z",
+                          "summaryPrice": 4500,
+                          "discountPrice": 500,
+                          "totalPrice": 5000,
+                          "dogs": [
+                            {
+                              "idDog": "507f1f77bcf86cd799439011",
+                              "quantity": 5
+                            }
+                          ]
+                        },
+                        {
+                          "id": "507f1f77bcf86cd799439012",
+                          "idUser": "457f1f77bcf86cd799439015",
+                          "date": "2023-05-23T18:25:43.511Z",
+                          "summaryPrice": 4500,
+                          "discountPrice": 500,
+                          "totalPrice": 5000,
+                          "dogs": [
+                            {
+                              "idDog": "507f1f77bcf86cd799439011",
+                              "quantity": 1
+                            }
+                          ]
+                        }
+                      ],
+                      "pagination": {
+                        "first": 1,
+                        "last": 1,
+                        "previous": 1,
+                        "next": 2,
+                        "page": 1,
+                        "isFirst": true,
+                        "isLast": true,
+                        "totalElements": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "507f1f77bcf86cd799439011"
+            },
+            "in": "query",
+            "name": "idUser",
+            "description": "ID of the user.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "example": 5,
+              "minimum": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "The page number of the results to retrieve.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "example": 25,
+              "minimum": 1
+            },
+            "in": "query",
+            "name": "limit",
+            "description": "The maximum number of results to return in each request.",
+            "required": true
+          }
+        ],
+        "operationId": "get-purchases-filter",
+        "description": "Retrieve purchases by a filter."
+      },
+      "post": {
+        "summary": "Create a purchase",
+        "operationId": "post-purchases",
+        "responses": {
+          "201": {
+            "description": "The Purchase was successfully created.",
+            "content": {},
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "example": "http://localhost:3000/purchases/507f1f77bcf86cd799439011"
+                },
+                "description": "The URL of the newly created purchase."
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains malformed data in parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-400": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Invalid request parameters.",
+                      "details": "Check the URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-401": {
+                    "value": {
+                      "code": "ERR-002",
+                      "message": "Unauthorized.",
+                      "details": "Authentication credentials are missing or invalid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request was well-formed but unable to be followed due to semantic errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-422": {
+                    "value": {
+                      "code": "ERR-422",
+                      "message": "The request was well-formed but unable to be followed due to semantic errors.",
+                      "details": "Check the request body."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "example-error-500": {
+                    "value": {
+                      "code": "ERR-500",
+                      "message": "Internal server error.",
+                      "details": "There was a problem processing your request. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a purchase.",
+        "security": [
+          {
+            "Token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseRequestModel"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "idUser": "457f1f77bcf86cd799439015",
+                    "summaryPrice": 4500,
+                    "discountPrice": 500,
+                    "totalPrice": 5000,
+                    "dogs": [
+                      {
+                        "idDog": "507f1f77bcf86cd799439011",
+                        "quantity": 5
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "Create a purchase request body."
+        },
+        "tags": [
+          "Purchases"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Dog": {
+        "title": "Dog",
+        "x-stoplight": {
+          "id": "jegw7fq1sdyhy"
+        },
+        "type": "object",
+        "description": "Dog model.",
+        "x-examples": {
+          "Example 1": {
+            "id": "507f1f77bcf86cd799439011",
+            "idSeller": "147f1f77bcf86cd799439052",
+            "availableQuantity": 5,
+            "name": "Admin Dog",
+            "breed": "Others",
+            "genre": "Male",
+            "price": 5000,
+            "description": "Admin Dog.",
+            "dateOfBirth": "2001-01-01",
+            "weight": 50,
+            "height": 60,
+            "width": 50,
+            "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the dog.",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "idSeller": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "example": "147f1f77bcf86cd799439052",
+            "description": "The ID of the seller who is selling the dog."
+          },
+          "availableQuantity": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "m6nwyqijr62ds"
+            },
+            "example": 5,
+            "minimum": 0,
+            "description": "The number of available dogs for sale."
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Admin Dog",
+            "description": "The name of the dog."
+          },
+          "breed": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "Others",
+            "description": "The breed of the dog."
+          },
+          "genre": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "bdzd2x5fms2nn"
+            },
+            "enum": [
+              "Male",
+              "Female"
+            ],
+            "example": "Male",
+            "description": "The gender of the dog."
+          },
+          "price": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "jmeqj4qdne1c4"
+            },
+            "example": 5000,
+            "description": "The price of the dog."
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "j7r0prgsuivq6"
+            },
+            "example": "Admin Dog.",
+            "description": "A brief description of the dog."
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g3kre0wi9l493"
+            },
+            "example": "2001-01-01",
+            "description": "The dog's date of birth."
+          },
+          "weight": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "zit86if6q92m8"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The weight of the dog in kilograms."
+          },
+          "height": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "lcg6aiocgsqxw"
+            },
+            "example": 60,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The height of the dog in centimeters."
+          },
+          "width": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "7l3jvsu5925c4"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The width of the dog in centimeters."
+          },
+          "pictureUrl": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h0q982x6khl8m"
+            },
+            "example": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80",
+            "description": "The URL of the dog's picture."
+          }
+        },
+        "required": [
+          "id",
+          "idSeller",
+          "availableQuantity",
+          "name",
+          "breed",
+          "genre",
+          "price",
+          "description",
+          "dateOfBirth",
+          "weight",
+          "height",
+          "width",
+          "pictureUrl"
+        ]
+      },
+      "CreateDog": {
+        "title": "Create Dog",
+        "x-stoplight": {
+          "id": "oq3nnch40tulr"
+        },
+        "type": "object",
+        "description": "Create Dog model.",
+        "x-examples": {
+          "Example 1": {
+            "idSeller": "147f1f77bcf86cd799439052",
+            "availableQuantity": 5,
+            "name": "Admin Dog",
+            "breed": "Others",
+            "genre": "Male",
+            "price": 5000,
+            "description": "Admin Dog.",
+            "dateOfBirth": "2001-01-01",
+            "weight": 50,
+            "height": 60,
+            "width": 50,
+            "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+          }
+        },
+        "properties": {
+          "idSeller": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "example": "147f1f77bcf86cd799439052",
+            "description": "The ID of the seller who is selling the dog."
+          },
+          "availableQuantity": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "m6nwyqijr62ds"
+            },
+            "example": 5,
+            "minimum": 0,
+            "description": "The number of available dogs for sale."
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Admin Dog",
+            "description": "The name of the dog."
+          },
+          "breed": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "Others",
+            "description": "The breed of the dog."
+          },
+          "genre": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "bdzd2x5fms2nn"
+            },
+            "enum": [
+              "Male",
+              "Female"
+            ],
+            "example": "Male",
+            "description": "The gender of the dog."
+          },
+          "price": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "jmeqj4qdne1c4"
+            },
+            "example": 5000,
+            "description": "The price of the dog."
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "j7r0prgsuivq6"
+            },
+            "example": "Admin Dog.",
+            "description": "A brief description of the dog."
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g3kre0wi9l493"
+            },
+            "example": "2001-01-01",
+            "description": "The dog's date of birth."
+          },
+          "weight": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "zit86if6q92m8"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The weight of the dog in kilograms."
+          },
+          "height": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "lcg6aiocgsqxw"
+            },
+            "example": 60,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The height of the dog in centimeters."
+          },
+          "width": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "7l3jvsu5925c4"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The width of the dog in centimeters."
+          },
+          "pictureUrl": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h0q982x6khl8m"
+            },
+            "example": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80",
+            "description": "The URL of the dog's picture. If it is not provided, a default image will be saved."
+          }
+        },
+        "required": [
+          "idSeller",
+          "availableQuantity",
+          "name",
+          "breed",
+          "genre",
+          "price",
+          "description",
+          "dateOfBirth",
+          "weight",
+          "height",
+          "width"
+        ]
+      },
+      "UpdateDog": {
+        "title": "Update Dog",
+        "x-stoplight": {
+          "id": "0xj0gxvt3hwgv"
+        },
+        "type": "object",
+        "description": "Update Dog model.",
+        "x-examples": {
+          "Example 1": {
+            "idSeller": "147f1f77bcf86cd799439052",
+            "availableQuantity": 5,
+            "name": "Admin Dog",
+            "breed": "Others",
+            "genre": "Male",
+            "price": 5000,
+            "description": "Admin Dog.",
+            "dateOfBirth": "2001-01-01",
+            "weight": 50,
+            "height": 60,
+            "width": 50,
+            "pictureUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80"
+          }
+        },
+        "properties": {
+          "idSeller": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "example": "147f1f77bcf86cd799439052",
+            "description": "The ID of the seller who is selling the dog."
+          },
+          "availableQuantity": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "m6nwyqijr62ds"
+            },
+            "example": 5,
+            "minimum": 0,
+            "description": "The number of available dogs for sale."
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Admin Dog",
+            "description": "The name of the dog."
+          },
+          "breed": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "Others",
+            "description": "The breed of the dog."
+          },
+          "genre": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "bdzd2x5fms2nn"
+            },
+            "enum": [
+              "Male",
+              "Female"
+            ],
+            "example": "Male",
+            "description": "The gender of the dog."
+          },
+          "price": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "jmeqj4qdne1c4"
+            },
+            "example": 5000,
+            "description": "The price of the dog."
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "j7r0prgsuivq6"
+            },
+            "example": "Admin Dog.",
+            "description": "A brief description of the dog."
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g3kre0wi9l493"
+            },
+            "example": "2001-01-01",
+            "description": "The dog's date of birth."
+          },
+          "weight": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "zit86if6q92m8"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The weight of the dog in kilograms."
+          },
+          "height": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "lcg6aiocgsqxw"
+            },
+            "example": 60,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The height of the dog in centimeters."
+          },
+          "width": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "7l3jvsu5925c4"
+            },
+            "example": 50,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The width of the dog in centimeters."
+          },
+          "pictureUrl": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h0q982x6khl8m"
+            },
+            "example": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80",
+            "description": "The URL of the dog's picture. If it is not provided, a default image will be saved."
+          }
+        }
+      },
+      "Cart": {
+        "title": "Cart",
+        "x-stoplight": {
+          "id": "fbb326gfmzghg"
+        },
+        "type": "object",
+        "description": "Cart model.",
+        "x-examples": {
+          "Example 1": {
+            "id": "507f1f77bcf86cd799439011",
+            "idUser": "147f1f77bcf86cd799439052",
+            "summaryPrice": 4500,
+            "discountPrice": 500,
+            "totalPrice": 5000,
+            "dogs": [
+              {
+                "idDog": "507f1f77bcf86cd799439011",
+                "quantity": 5
+              },
+              {
+                "idDog": "507f1f77bcf86cfadafafaf1",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the cart.",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "idUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "example": "147f1f77bcf86cd799439052",
+            "description": "The ID of the user."
+          },
+          "summaryPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "m6nwyqijr62ds"
+            },
+            "example": 4500,
+            "description": "The summary of the cart (totalPrice - discountPrice)."
+          },
+          "discountPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "pnejv11szhive"
+            },
+            "description": "The total discount of the cart.",
+            "example": 500
+          },
+          "totalPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "2urxenqt9b6z3"
+            },
+            "example": 5000,
+            "description": "The total price of the cart."
+          },
+          "dogs": {
+            "x-stoplight": {
+              "id": "a0q1c7vbh57vb"
+            },
+            "type": "array",
+            "description": "The dogs added to cart.",
+            "items": {
+              "$ref": "#/components/schemas/DogsCart",
+              "x-stoplight": {
+                "id": "s0ixc2hw8x7xi"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "idUser",
+          "summaryPrice",
+          "discountPrice",
+          "totalPrice",
+          "dogs"
+        ]
+      },
+      "DogsCart": {
+        "title": "DogsCart",
+        "x-stoplight": {
+          "id": "wcwyqs0shu5ag"
+        },
+        "type": "object",
+        "description": "Dogs in cart model.",
+        "x-examples": {
+          "Example 1": {
+            "idDog": "507f1f77bcf86cd799439011",
+            "quantity": 5
+          }
+        },
+        "properties": {
+          "idDog": {
+            "type": "string",
+            "description": "The ID of the dog.",
+            "example": "507f1f77bcf86cd799439011",
+            "x-stoplight": {
+              "id": "98s7eggie3eb6"
+            }
+          },
+          "quantity": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "drn24rmc6utsz"
+            },
+            "description": "The quantity of the specified dog in cart.",
+            "example": 5,
+            "minimum": 1
+          }
+        },
+        "required": [
+          "idDog",
+          "quantity"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "x-stoplight": {
+          "id": "lbumk8tbu85la"
+        },
+        "type": "object",
+        "description": "User model.",
+        "x-examples": {
+          "Example 1": {
+            "id": "507f1f77bcf86cd799439011",
+            "name": "Arnold Schwarzenegger",
+            "email": "arnold@gmail.com",
+            "isSeller": true
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the user.",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Arnold Schwarzenegger",
+            "description": "The name of the user."
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "arnold@gmail.com",
+            "description": "The email of the user."
+          },
+          "isSeller": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "description": "A flag indicating if the user is also a seller."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "isSeller"
+        ]
+      },
+      "UpdateUser": {
+        "title": "Update User",
+        "x-stoplight": {
+          "id": "hg4e3bc6mlkfo"
+        },
+        "type": "object",
+        "description": "Update User model.",
+        "x-examples": {
+          "Example 1": {
+            "name": "Arnold Schwarzenegger",
+            "isSeller": true
+          },
+          "Example 2": {
+            "isSeller": true
+          }
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Arnold Schwarzenegger",
+            "description": "The name of the user."
+          },
+          "isSeller": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "description": "A flag indicating if the user is also a seller."
+          }
+        }
+      },
+      "SignUp": {
+        "title": "Sign Up (Create User)",
+        "x-stoplight": {
+          "id": "n1ndotbtn3c2b"
+        },
+        "type": "object",
+        "description": "Sign Up (Create User) model.",
+        "x-examples": {
+          "Example 1": {
+            "name": "Arnold Schwarzenegger",
+            "email": "arnold@gmail.com",
+            "password": "secretpassword123",
+            "passwordConfirm": "secretpassword123",
+            "isSeller": true
+          },
+          "Example 2 - isSeller = false": {
+            "name": "Arnold Schwarzenegger",
+            "email": "arnold@gmail.com",
+            "password": "secretpassword123",
+            "passwordConfirm": "secretpassword123",
+            "isSeller": false
+          },
+          "Example 3 - isSeller = false (omitted)": {
+            "name": "Arnold Schwarzenegger",
+            "email": "arnold@gmail.com",
+            "password": "secretpassword123",
+            "passwordConfirm": "secretpassword123"
+          }
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vin7eu9ol1jxt"
+            },
+            "example": "Arnold Schwarzenegger",
+            "description": "The name of the user."
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "arnold@gmail.com",
+            "description": "The email of the user."
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "7fu85wlk7cbi1"
+            },
+            "description": "The password of the user.",
+            "example": "secretpassword123"
+          },
+          "passwordConfirm": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dhll31mdl8s4i"
+            },
+            "description": "The password confirmation of the user.",
+            "example": "secretpassword123"
+          },
+          "isSeller": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "qq3axudn3l9ra"
+            },
+            "description": "A flag indicating if the user is also a seller. If it is not provided, isSeller = false."
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "passwordConfirm"
+        ]
+      },
+      "Login": {
+        "title": "Login",
+        "x-stoplight": {
+          "id": "fipms0vpm5qrw"
+        },
+        "type": "object",
+        "description": "Login model.",
+        "x-examples": {
+          "Example 1": {
+            "email": "arnold@gmail.com",
+            "password": "secretpassword123"
+          }
+        },
+        "properties": {
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "g0xm9127q2un1"
+            },
+            "example": "arnold@gmail.com",
+            "description": "The email of the user."
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "7fu85wlk7cbi1"
+            },
+            "description": "The password of the user.",
+            "example": "secretpassword123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "Pagination": {
+        "title": "Pagination",
+        "x-stoplight": {
+          "id": "64zfy5pcancy5"
+        },
+        "type": "object",
+        "description": "General pagination model.",
+        "properties": {
+          "first": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "heb7eei0hh7fx"
+            },
+            "description": "The first page in the pagination sequence.",
+            "example": 1,
+            "minimum": 1
+          },
+          "last": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "68whsvrf5ok5l"
+            },
+            "minimum": 1,
+            "description": "The last page in the pagination sequence.",
+            "example": 50
+          },
+          "previous": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "hgirm55xdmoye"
+            },
+            "minimum": 1,
+            "description": "The previous page in the pagination sequence.",
+            "example": 1
+          },
+          "next": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "qx5yhdw9d18tu"
+            },
+            "minimum": 1,
+            "example": 3,
+            "description": "The next page in the pagination sequence."
+          },
+          "page": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "1ift72adznaf6"
+            },
+            "description": "The current page in the pagination sequence.",
+            "example": 2,
+            "minimum": 1
+          },
+          "isFirst": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "ftrjo0wz342g9"
+            },
+            "description": "A flag indicating whether the current page is the first page in the pagination sequence."
+          },
+          "isLast": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "ojl34m66l7b5o"
+            },
+            "description": "A flag indicating whether the current page is the last page in the pagination sequence."
+          },
+          "totalElements": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "a6hrfqfbohs8a"
+            },
+            "example": 8,
+            "minimum": 0,
+            "description": "The total number of elements in the paginated collection."
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "previous",
+          "next",
+          "page",
+          "isFirst",
+          "isLast",
+          "totalElements"
+        ],
+        "x-examples": {
+          "Example 1": {
+            "first": 1,
+            "last": 50,
+            "previous": 1,
+            "next": 3,
+            "page": 2,
+            "isFirst": true,
+            "isLast": true,
+            "totalElements": 8
+          }
+        }
+      },
+      "Error": {
+        "title": "Error",
+        "x-stoplight": {
+          "id": "8k3mafh7zjwxn"
+        },
+        "type": "object",
+        "description": "Error response model.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "lklojt9c6cuin"
+            },
+            "description": "A code that represents the error.",
+            "example": "ERR-002"
+          },
+          "message": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "degp7mtulr1f8"
+            },
+            "description": "An error message.",
+            "example": "Invalid request parameters."
+          },
+          "details": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "yxce6c9kocxgd"
+            },
+            "description": "Details about the error.",
+            "example": "Check the URL."
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details"
+        ],
+        "x-examples": {
+          "example-error-400": {
+            "code": "ERR-002",
+            "message": "Invalid request parameters.",
+            "details": "Check the URL."
+          },
+          "example-error-401": {
+            "code": "ERR-002",
+            "message": "Unauthorized.",
+            "details": "Authentication credentials are missing or invalid."
+          },
+          "example-error-404": {
+            "code": "ERR-004",
+            "message": "ID not Found.",
+            "details": "No dog was found with the ID specified."
+          },
+          "example-error-500": {
+            "code": "ERR-500",
+            "message": "Internal server error.",
+            "details": "There was a problem processing your request. Please try again later."
+          },
+          "example-error-422": {
+            "code": "ERR-422",
+            "message": "The request was well-formed but unable to be followed due to semantic errors.",
+            "details": "Check the request body."
+          }
+        }
+      },
+      "Purchase": {
+        "title": "Purchase",
+        "x-stoplight": {
+          "id": "zc3i86qcfnf49"
+        },
+        "type": "object",
+        "description": "Purchase model.",
+        "x-examples": {
+          "Example 1": {
+            "id": "507f1f77bcf86cd799439011",
+            "idUser": "457f1f77bcf86cd799439015",
+            "date": "2023-04-23T18:25:43.511Z",
+            "summaryPrice": 4500,
+            "discountPrice": 500,
+            "totalPrice": 5000,
+            "dogs": [
+              {
+                "idDog": "507f1f77bcf86cd799439011",
+                "quantity": 5
+              }
+            ]
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the purchase.",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "idUser": {
+            "type": "string",
+            "description": "The ID of the user.",
+            "example": "457f1f77bcf86cd799439015",
+            "x-stoplight": {
+              "id": "fz3orem04w36d"
+            }
+          },
+          "date": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8lkw00hpc9wiq"
+            },
+            "description": "Date of the purchase.",
+            "example": "2023-04-23T18:25:43.511Z"
+          },
+          "summaryPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "5998rtc3pwe5q"
+            },
+            "example": 4500,
+            "description": "The summary of the cart (totalPrice - discountPrice)."
+          },
+          "discountPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "weiuehbrx4pom"
+            },
+            "description": "The total discount of the cart.",
+            "example": 500
+          },
+          "totalPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "m1nyjky0uvdrv"
+            },
+            "example": 5000,
+            "description": "The total price of the cart."
+          },
+          "dogs": {
+            "x-stoplight": {
+              "id": "wf31sa0lqvsf5"
+            },
+            "type": "array",
+            "description": "The dogs added to cart.",
+            "items": {
+              "$ref": "#/components/schemas/DogsCart"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "idUser",
+          "date",
+          "summaryPrice",
+          "discountPrice",
+          "totalPrice",
+          "dogs"
+        ]
+      },
+      "CreatePurchaseRequestModel": {
+        "title": "CreatePurchaseRequestModel",
+        "x-stoplight": {
+          "id": "yf0vexhiqr7lo"
+        },
+        "type": "object",
+        "description": "Create Purchase Request Model",
+        "x-examples": {
+          "Example 1": {
+            "idUser": "457f1f77bcf86cd799439015",
+            "summaryPrice": 4500,
+            "discountPrice": 500,
+            "totalPrice": 5000,
+            "dogs": [
+              {
+                "idDog": "507f1f77bcf86cd799439011",
+                "quantity": 5
+              }
+            ]
+          }
+        },
+        "properties": {
+          "idUser": {
+            "type": "string",
+            "description": "The ID of the user.",
+            "example": "457f1f77bcf86cd799439015",
+            "x-stoplight": {
+              "id": "fz3orem04w36d"
+            }
+          },
+          "summaryPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "5998rtc3pwe5q"
+            },
+            "example": 4500,
+            "description": "The summary of the cart (totalPrice - discountPrice)."
+          },
+          "discountPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "weiuehbrx4pom"
+            },
+            "description": "The total discount of the cart.",
+            "example": 500
+          },
+          "totalPrice": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "m1nyjky0uvdrv"
+            },
+            "example": 5000,
+            "description": "The total price of the cart."
+          },
+          "dogs": {
+            "x-stoplight": {
+              "id": "wf31sa0lqvsf5"
+            },
+            "type": "array",
+            "description": "The dogs added to cart.",
+            "items": {
+              "$ref": "#/components/schemas/DogsCart"
+            }
+          }
+        },
+        "required": [
+          "idUser",
+          "summaryPrice",
+          "discountPrice",
+          "totalPrice",
+          "dogs"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Authorization Token."
+      }
+    },
+    "examples": {},
+    "requestBodies": {}
+  },
+  "tags": [
+    {
+      "name": "DOGMKT"
+    }
+  ]
+}
