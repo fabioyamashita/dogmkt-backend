@@ -17,3 +17,5 @@ $ npm run start:dev
 // For production errors
 $ npm run start:prod
 ```
+
+To test the endpoints, after starting the node server, access the swagger at: http://localhost:3000/api-docs
