@@ -837,28 +837,35 @@ paths:
                 type: object
                 description: Response body.
                 properties:
-                  token:
-                    type: string
+                  data:
+                    type: object
                     x-stoplight:
-                      id: yfln8ougcur10
-                    description: JWT Token generated to be used in the application.
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-                  user:
-                    $ref: '#/components/schemas/User'
-                    x-stoplight:
-                      id: q3hgeikigah60
+                      id: wf0njigpz6g04
+                    description: Data Envelope.
+                    required:
+                      - token
+                      - user
+                    properties:
+                      token:
+                        type: string
+                        x-stoplight:
+                          id: jesu4sfuecgj8
+                        description: JWT Token generated to be used in the application.
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                      user:
+                        $ref: '#/components/schemas/User'
                 required:
-                  - token
-                  - user
+                  - data
               examples:
                 Example 1:
                   value:
-                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-                    user:
-                      id: 507f1f77bcf86cd799439011
-                      name: Arnold Schwarzenegger
-                      email: arnold@gmail.com
-                      isSeller: true
+                    data:
+                      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                      user:
+                        id: 507f1f77bcf86cd799439011
+                        name: Arnold Schwarzenegger
+                        email: arnold@gmail.com
+                        isSeller: true
         '400':
           description: The request contains malformed data in parameters.
           content:
