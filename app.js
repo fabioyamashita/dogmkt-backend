@@ -6,11 +6,16 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const bodyParser = require("body-parser");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 const userRouter = require("./routes/user.routes");
 
 const app = express();
+
+// swagger doc
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -49,7 +54,7 @@ app.use(
 );
 
 // ROUTES
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1", userRouter);
 
 // Global Error handling middleware
 app.use(globalErrorHandler);
