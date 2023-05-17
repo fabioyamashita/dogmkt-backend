@@ -20,10 +20,10 @@ const handleValidationErrorDB = (err) => {
 };
 
 const handleJWTError = () =>
-  new AppError(401, "Invalid Token. Please log in again.", "");
+  new AppError(401, "Unauthorized.", "Authentication credentials are missing or invalid.");
 
 const handleJWTExpiredError = () =>
-  new AppError(401, "Your token has expired. Please log in again.", "");
+  new AppError(401, "Unauthorized.", "Authentication credentials are missing or invalid.");
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
