@@ -10,6 +10,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
+const authRouter = require("./routes/auth.routes");
 const userRouter = require("./routes/user.routes");
 
 const app = express();
@@ -54,9 +55,19 @@ app.use(
 );
 
 // ROUTES
-app.use("/api/v1", userRouter);
+app.use("/api/v1", authRouter);
+app.use("/api/v1/users", userRouter);
 
 // Global Error handling middleware
 app.use(globalErrorHandler);
+
+// Send General 404 response if URL is not found
+app.get('*', function(req, res){
+  res.status(404).send({
+    code: "ERR-404",
+    message: "That's an error.",
+    details: "This resource is not available. Check the URL."
+  });
+});
 
 module.exports = app;

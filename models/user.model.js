@@ -60,7 +60,7 @@ userSchema.pre("save", async function (next) {
   // Hash the password with the cost of 12
   this.password = await bcrypt.hash(this.password, 12);
 
-  // Delete passwordConfirm field to no persist in DB
+  // Delete passwordConfirm field to not persist in DB
   this.passwordConfirm = undefined;
 
   next();
