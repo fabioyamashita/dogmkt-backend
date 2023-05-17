@@ -6,7 +6,7 @@ exports.getOne = (Model) =>
     let doc = await Model.findById(req.params.id);
 
     if (!doc) {
-      return next(new AppError("No document found with that ID", 404));
+      return next(new AppError(404, "No document found with that ID.", ""));
     }
 
     res.status(200).json({
