@@ -7,11 +7,11 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const bodyParser = require("body-parser");
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('../swagger.json');
 
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
-const authRouter = require("./routes/auth.routes");
-const userRouter = require("./routes/user.routes");
+const authRouter = require("./routes/authRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
