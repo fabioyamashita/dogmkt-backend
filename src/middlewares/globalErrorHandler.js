@@ -19,12 +19,6 @@ const handleValidationErrorDB = (err) => {
   return new AppError(400, "The request contains malformed data in parameters.", message);
 };
 
-const handleJWTError = () =>
-  new AppError(401, "Unauthorized.", "Authentication credentials are missing or invalid.");
-
-const handleJWTExpiredError = () =>
-  new AppError(401, "Unauthorized.", "Authentication credentials are missing or invalid.");
-
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     code: err.statusCode,
@@ -70,10 +64,7 @@ module.exports = (err, req, res, next) => {
 
     if (error.name === "CastError") error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === "ValidationError")
-      error = handleValidationErrorDB(error);
-    if (error.name === "JsonWebTokenError") error = handleJWTError();
-    if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
+    if (error.name === "ValidationError") error = handleValidationErrorDB(error);
 
     sendErrorProd(error, res);
   }

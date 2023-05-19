@@ -1,4 +1,5 @@
 const express = require("express");
+require('express-async-errors');
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
