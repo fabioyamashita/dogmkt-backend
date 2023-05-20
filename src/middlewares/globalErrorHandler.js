@@ -19,12 +19,8 @@ const handleValidationErrorDB = (err) => {
   return new AppError(400, "The request contains malformed data in parameters.", message);
 };
 
-const handleJWTError = () =>
-  new AppError(401, "Unauthorized.", "");
-
-const handleJWTExpiredError = () =>
-  new AppError(401, "Unauthorized.", "");
-
+const handleJWTError = () => new AppError(401, "Unauthorized.", "");
+const handleJWTExpiredError = () => new AppError(401, "Unauthorized.", "");
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -74,7 +70,7 @@ module.exports = (err, req, res, next) => {
     if (error.name === "ValidationError") error = handleValidationErrorDB(error);
     if (error.name === "JsonWebTokenError") error = handleJWTError();
     if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
-    
+
     sendErrorProd(error, res);
   }
 };
