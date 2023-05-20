@@ -8,7 +8,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: "./config-example.env" });
+dotenv.config({ path: "./config.env" });
 const app = require("./app");
 
 mongoose

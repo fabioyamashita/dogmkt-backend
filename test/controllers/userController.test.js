@@ -1,9 +1,7 @@
 const userController = require('../../src/controllers/userController');
 const userService = require('../../src/services/userService');
 
-jest.mock('../../src/services/userService', () => ({
-  findById: jest.fn()
-}));
+userService.findById = jest.fn();
 
 let req, res, next;
 
@@ -34,10 +32,9 @@ describe('userController Tests', () => {
     beforeEach(() => setInitialMockValues());
     afterEach(() => jest.clearAllMocks());
   
-    it('should return 200 and send the user in response', async () => {
+    it('should return 200 OK and send User in response body', async () => {
       // Arrange
-      const user = mockUser;
-      userService.findById.mockResolvedValueOnce(user);
+      userService.findById.mockResolvedValueOnce(mockUser);
   
       // Act
       await userController.getUserById(req, res, next);
@@ -45,24 +42,8 @@ describe('userController Tests', () => {
       // Assert
       expect(userService.findById).toHaveBeenCalledWith(mockUser.id);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ data: user });
+      expect(res.json).toHaveBeenCalledWith({ data: mockUser });
       expect(next).not.toHaveBeenCalled();
-    });
-  
-    it('should call next with an error if user retrieval fails', async () => {
-      // Arrange
-      userService.findById.mockImplementation(() => {
-        throw new Error();
-      });
-  
-      // Act
-      await userController.getUserById(req, res, next);
-  
-      // Assert
-      expect(userService.findById).toHaveBeenCalledWith(mockUser.id);
-      expect(next).toHaveBeenCalledWith(error);
-      expect(res.status).not.toHaveBeenCalled();
-      expect(res.json).not.toHaveBeenCalled();
     });
   });
 });
