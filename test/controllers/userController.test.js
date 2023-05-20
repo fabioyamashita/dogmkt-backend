@@ -1,5 +1,6 @@
 const userController = require('../../src/controllers/userController');
 const userService = require('../../src/services/userService');
+const AppError = require('../../src/utils/appError');
 
 userService.findById = jest.fn();
 
@@ -28,10 +29,10 @@ const mockUser = {
 };
 
 describe('userController Tests', () => {
-  describe('/GET /users/:idUser', () => {
-    beforeEach(() => setInitialMockValues());
-    afterEach(() => jest.clearAllMocks());
-  
+  beforeEach(() => setInitialMockValues());
+  afterEach(() => jest.clearAllMocks());
+
+  describe('/GET /users/:idUser with an ID that exists', () => {
     it('should return 200 OK and send User in response body', async () => {
       // Arrange
       userService.findById.mockResolvedValueOnce(mockUser);
@@ -44,6 +45,23 @@ describe('userController Tests', () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({ data: mockUser });
       expect(next).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('/GET /users/:idUser with an ID that does not exists', () => {
+    it('should call next() with an AppError with 404 code', async () => {
+      // Arrange
+      userService.findById.mockResolvedValueOnce(null);
+  
+      // Act
+      await userController.getUserById(req, res, next);
+  
+      // Assert
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(
+        new AppError(404, "No user found with that ID.", "")
+      );
     });
   });
 });
