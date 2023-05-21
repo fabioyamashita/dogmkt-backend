@@ -13,7 +13,7 @@ userRepository.findById = jest.fn();
 describe('userService Tests', () => {
   afterEach(() => jest.clearAllMocks());
 
-  describe('ID found in userRepository', () => {
+  describe('User ID found in userRepository', () => {
     it('should return the User', async () => {
       // Arrange
       userRepository.findById.mockResolvedValueOnce(mockUser);
@@ -27,7 +27,7 @@ describe('userService Tests', () => {
     });
   });
 
-  describe('ID not found in userRepository', () => {
+  describe('User ID not found in userRepository', () => {
     it('should return null', async () => {
       // Arrange
       userRepository.findById.mockResolvedValueOnce(null);
