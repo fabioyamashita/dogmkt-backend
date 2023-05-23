@@ -4,7 +4,7 @@ const userService = require("../services/userService");
 const AppError = require("../utils/appError");
 
 const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user._id);
+  const token = signToken(user.id);
   removePasswordFromOutput(user);
 
   res.status(statusCode).json({
@@ -57,7 +57,7 @@ exports.login = async (req, res, next) => {
     throw new AppError(401, "Incorrect email or password!", "");
   };
 
-  // 3) If everything ok, send token to client
+  // 3) If everything ok, send token and user data to client
   createSendToken(user, 200, res);
 };
 
