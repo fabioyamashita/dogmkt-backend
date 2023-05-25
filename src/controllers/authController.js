@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const AppError = require("../utils/appError");
 
-const createSendToken = (user, statusCode, res) => {
+let createSendToken = (user, statusCode, res) => {
   const token = signToken(user.id);
   removePasswordFromOutput(user);
 
@@ -15,13 +15,13 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-const signToken = (id) => {
+let signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-const removePasswordFromOutput = (user) => user.password = undefined;
+let removePasswordFromOutput = (user) => user.password = undefined;
 
 exports.signup = async (req, res, next) => {
   const user = await userService.create({
@@ -101,3 +101,13 @@ const getTokenFromHeaders = (headers) => {
 const decodeToken = async (token) => {
   return await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 };
+
+// exports.exportedForTesting = {
+//   createSendToken,
+//   signToken,
+//   removePasswordFromOutput,
+//   isValidLoginRequest,
+//   isUserValidated,
+//   getTokenFromHeaders,
+//   decodeToken
+// }

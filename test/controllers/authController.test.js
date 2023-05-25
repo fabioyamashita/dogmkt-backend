@@ -1,8 +1,5 @@
-const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
-const authController = require('../../src/controllers/authController');
-const userService = require('../../src/services/userService');
-const AppError = require('../../src/utils/appError');
+const rewire = require("rewire");
+let authController = rewire('../../src/controllers/authController');
 
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
@@ -11,37 +8,38 @@ const mockUser = {
   email: 'test@gmail.com'
 };
 
-const mockUserWithPassword = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com',
-  password: '1234'
-};
-
 describe("createSendToken tests", () => {
-  afterEach(() => jest.clearAllMocks());
+  beforeEach(() => {});
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+    authController = rewire('../../src/controllers/authController');
+  });
 
   const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
   };
-
-  authController.signToken = jest.fn();
-  authController.removePasswordFromOutput = jest.fn();
-
+  
   it("should create a token and send it along with the user data", () => {
     // Arrange
     const statusCode = 200;
     const token = "token123";
-    authController.signToken.mockResolvedValueOnce("token123");
+    const signTokenMock = jest.fn().mockReturnValue(token);
+    const removePasswordFromOutputMock = jest.fn().mockReturnValue(mockUser);
+
+    authController.__set__("signToken", signTokenMock);
+    authController.__set__("removePasswordFromOutput", removePasswordFromOutputMock);
+    const signToken = authController.__get__("signToken");
+    const removePasswordFromOutput = authController.__get__("removePasswordFromOutput");
+    const createSendToken = authController.__get__("createSendToken");
 
     // Act
-    authController.createSendToken(mockUser, statusCode, res);
+    createSendToken(mockUser, statusCode, res);
 
     // Assert
-    expect(authController.signToken).toHaveBeenCalledWith(mockUser.id);
-    expect(authController.removePasswordFromOutput).toHaveBeenCalledWith(user);
+    expect(signToken).toHaveBeenCalledWith(mockUser.id);
+    expect(removePasswordFromOutput).toHaveBeenCalledWith(mockUser);
     expect(res.status).toHaveBeenCalledWith(statusCode);
     expect(res.json).toHaveBeenCalledWith({
       data: {
@@ -49,5 +47,33 @@ describe("createSendToken tests", () => {
         user: mockUser
       },
     });
+  });
+});
+
+describe("removePasswordFromOutput tests", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+    authController = rewire('../../src/controllers/authController');
+  });
+
+  it("should remove the password property from the user object", () => {
+    // Arrange
+    const mockUserWithPassword = { 
+      id: '64617c4eac31a04063dcffc2', 
+      name: 'John Albert',
+      isSeller: false,
+      email: 'test@gmail.com',
+      password: '1234'
+    };
+
+    const removePasswordFromOutput2 = authController.__get__("removePasswordFromOutput");
+
+    // Act
+    removePasswordFromOutput2(mockUserWithPassword);
+
+    // Assert
+    expect(mockUserWithPassword).toEqual(mockUser);
+    expect(mockUserWithPassword.password).toBeUndefined();
   });
 });
