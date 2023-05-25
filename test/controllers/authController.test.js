@@ -1,5 +1,5 @@
 const rewire = require("rewire");
-let authController = rewire('../../src/controllers/authController');
+let authController;
 
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
@@ -9,11 +9,13 @@ const mockUser = {
 };
 
 describe("createSendToken tests", () => {
-  beforeEach(() => {});
+  beforeEach(() => {
+    authController = rewire('../../src/controllers/authController');
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
-    jest.resetModules();
-    authController = rewire('../../src/controllers/authController');
+    authController = undefined;
   });
 
   const res = {
@@ -51,10 +53,13 @@ describe("createSendToken tests", () => {
 });
 
 describe("removePasswordFromOutput tests", () => {
+  beforeEach(() => {
+    authController = rewire('../../src/controllers/authController');
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
-    jest.resetModules();
-    authController = rewire('../../src/controllers/authController');
+    authController = undefined;
   });
 
   it("should remove the password property from the user object", () => {
@@ -67,10 +72,10 @@ describe("removePasswordFromOutput tests", () => {
       password: '1234'
     };
 
-    const removePasswordFromOutput2 = authController.__get__("removePasswordFromOutput");
+    const removePasswordFromOutput = authController.__get__("removePasswordFromOutput");
 
     // Act
-    removePasswordFromOutput2(mockUserWithPassword);
+    removePasswordFromOutput(mockUserWithPassword);
 
     // Assert
     expect(mockUserWithPassword).toEqual(mockUser);
