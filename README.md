@@ -2,6 +2,10 @@
 
 This is the back-end of DOGMKT built with node.js.
 
+## Documentation
+
+You can find all the documentation of my insights and solutions to the challenges I faced during this project [here](https://github.com/fabioyamashita/dogmkt-backend/wiki).
+
 ## Docker
 
 ```
