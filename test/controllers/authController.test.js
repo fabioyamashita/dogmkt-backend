@@ -1,5 +1,8 @@
 const rewire = require("rewire");
+const dotenv = require('dotenv');
 let authController;
+
+dotenv.config();
 
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
@@ -80,5 +83,71 @@ describe("removePasswordFromOutput tests", () => {
     // Assert
     expect(mockUserWithPassword).toEqual(mockUser);
     expect(mockUserWithPassword.password).toBeUndefined();
+  });
+});
+
+describe('isValidLoginRequest tests', () => {
+  let isValidLoginRequest;
+  
+  beforeEach(() => {
+    authController = rewire('../../src/controllers/authController');
+    isValidLoginRequest = authController.__get__("isValidLoginRequest");
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    authController = undefined;
+    isValidLoginRequest = undefined
+  });
+
+  test('should return true for a valid login request', () => {
+    // Arrange
+    const requestBody = {
+      email: 'test@example.com',
+      password: 'password123',
+    };
+
+    // Act
+    const result = isValidLoginRequest(requestBody);
+
+    // Assert
+    expect(result).toBe(true);
+  });
+
+  test('should return false if email is missing', () => {
+    // Arrange
+    const requestBody = {
+      password: 'password123',
+    };
+
+    // Act
+    const result = isValidLoginRequest(requestBody);
+
+    // Assert
+    expect(result).toBe(false);
+  });
+
+  test('should return false if password is missing', () => {
+    // Arrange
+    const requestBody = {
+      email: 'test@example.com',
+    };
+
+    // Act
+    const result = isValidLoginRequest(requestBody);
+
+    // Assert
+    expect(result).toBe(false);
+  });
+
+  test('should return false if both email and password are missing', () => {
+    // Arrange
+    const requestBody = {};
+
+    // Act
+    const result = isValidLoginRequest(requestBody);
+
+    // Assert
+    expect(result).toBe(false);
   });
 });

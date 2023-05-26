@@ -61,12 +61,12 @@ exports.login = async (req, res, next) => {
   createSendToken(user, 200, res);
 };
 
-const isValidLoginRequest = (requestBody) => {
+let isValidLoginRequest = (requestBody) => {
   const { email, password } = requestBody;
-  return email && password;
+  return Boolean(email && password);
 };
 
-const isUserValidated = async (user, password) => { 
+let isUserValidated = async (user, password) => { 
   return user && await user.correctPassword(password, user.password);
 };
 
@@ -91,23 +91,13 @@ exports.protect = async (req, res, next) => {
   next();
 };
 
-const getTokenFromHeaders = (headers) => {
+let getTokenFromHeaders = (headers) => {
   if (headers.authorization && headers.authorization.startsWith('Bearer')) {
     return headers.authorization.split(" ")[1];
   }
   return null;
 };
 
-const decodeToken = async (token) => {
+let decodeToken = async (token) => {
   return await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 };
-
-// exports.exportedForTesting = {
-//   createSendToken,
-//   signToken,
-//   removePasswordFromOutput,
-//   isValidLoginRequest,
-//   isUserValidated,
-//   getTokenFromHeaders,
-//   decodeToken
-// }
