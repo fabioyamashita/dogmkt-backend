@@ -1,8 +1,8 @@
 const rewire = require("rewire");
 const dotenv = require('dotenv');
-let authController;
-
 dotenv.config();
+
+let authController;
 
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
@@ -97,7 +97,7 @@ describe('isValidLoginRequest tests', () => {
   afterEach(() => {
     jest.clearAllMocks();
     authController = undefined;
-    isValidLoginRequest = undefined
+    isValidLoginRequest = undefined;
   });
 
   test('should return true for a valid login request', () => {
@@ -149,5 +149,129 @@ describe('isValidLoginRequest tests', () => {
 
     // Assert
     expect(result).toBe(false);
+  });
+});
+
+describe('isUserValidated tests', () => {
+  let isUserValidated;
+  
+  beforeEach(() => {
+    authController = rewire('../../src/controllers/authController');
+    isUserValidated = authController.__get__("isUserValidated");
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    authController = undefined;
+    isUserValidated = undefined;
+  });
+
+  test('should return true if user exists and correctPassword resolves to true', async () => {
+    // Arrange
+    const user = {
+      correctPassword: jest.fn().mockResolvedValueOnce(true),
+      password: 'hashedPassword'
+    };
+    const password = 'password';
+
+    // Act
+    const result = await isUserValidated(user, password);
+
+    // Assert
+    expect(result).toBe(true);
+    expect(user.correctPassword).toHaveBeenCalledWith(password, user.password);
+  });
+
+  test('should return false if user exists but correctPassword resolves to false', async () => {
+    // Arrange
+    const user = {
+      correctPassword: jest.fn().mockResolvedValueOnce(false),
+      password: 'hashedPassword'
+    };
+    const password = 'password';
+
+    // Act
+    const result = await isUserValidated(user, password);
+
+    // Assert
+    expect(result).toBe(false);
+    expect(user.correctPassword).toHaveBeenCalledWith(password, user.password);
+  });
+
+  test('should return false if user is null or undefined', async () => {
+    // Arrange
+    const user = null;
+    const password = 'password';
+
+    // Act
+    const result = await isUserValidated(user, password);
+
+    // Assert
+    expect(result).toBe(false);
+  });
+});
+
+describe('getTokenFromHeaders tests', () => {
+  let getTokenFromHeaders;
+  
+  beforeEach(() => {
+    authController = rewire('../../src/controllers/authController');
+    getTokenFromHeaders = authController.__get__("getTokenFromHeaders");
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    authController = undefined;
+    getTokenFromHeaders = undefined;
+  });
+
+  test('should return the token if it starts with "Bearer"', () => {
+    // Arrange
+    const headers = {
+      authorization: 'Bearer myToken'
+    };
+
+    // Act
+    const result = getTokenFromHeaders(headers);
+
+    // Assert
+    expect(result).toBe('myToken');
+  });
+
+  test('should return null if the authorization header is missing', () => {
+    // Arrange
+    const headers = {};
+
+    // Act
+    const result = getTokenFromHeaders(headers);
+
+    // Assert
+    expect(result).toBeNull();
+  });
+
+  test('should return null if the token does not start with "Bearer"', () => {
+    // Arrange
+    const headers = {
+      authorization: 'Token myToken'
+    };
+
+    // Act
+    const result = getTokenFromHeaders(headers);
+
+    // Assert
+    expect(result).toBeNull();
+  });
+
+  test('should return null if the token is missing', () => {
+    // Arrange
+    const headers = {
+      authorization: 'Bearer'
+    };
+
+    // Act
+    const result = getTokenFromHeaders(headers);
+
+    // Assert
+    expect(result).toBeNull();
   });
 });

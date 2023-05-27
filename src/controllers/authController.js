@@ -67,7 +67,7 @@ let isValidLoginRequest = (requestBody) => {
 };
 
 let isUserValidated = async (user, password) => { 
-  return user && await user.correctPassword(password, user.password);
+  return Boolean(user && await user.correctPassword(password, user.password));
 };
 
 exports.protect = async (req, res, next) => {
@@ -92,8 +92,9 @@ exports.protect = async (req, res, next) => {
 };
 
 let getTokenFromHeaders = (headers) => {
-  if (headers.authorization && headers.authorization.startsWith('Bearer')) {
-    return headers.authorization.split(" ")[1];
+  if (headers.authorization?.startsWith('Bearer')) {
+    const token = headers.authorization.split(" ")[1];
+    if (token) return token;
   }
   return null;
 };
