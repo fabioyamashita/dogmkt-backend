@@ -66,7 +66,6 @@ let isValidLoginRequest = (requestBody) => {
   return Boolean(email && password);
 };
 
-
 let isUserValidated = async (user, password) => { 
   return Boolean(await user?.correctPassword(password, user.password));
 };
