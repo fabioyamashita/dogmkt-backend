@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const AppError = require("../utils/appError");
 
-const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user._id);
+let createSendToken = (user, statusCode, res) => {
+  const token = signToken(user.id);
   removePasswordFromOutput(user);
 
   res.status(statusCode).json({
@@ -15,13 +15,13 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-const signToken = (id) => {
+let signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-const removePasswordFromOutput = (user) => user.password = undefined;
+let removePasswordFromOutput = (user) => user.password = undefined;
 
 exports.signup = async (req, res, next) => {
   const user = await userService.create({
@@ -57,17 +57,17 @@ exports.login = async (req, res, next) => {
     throw new AppError(401, "Incorrect email or password!", "");
   };
 
-  // 3) If everything ok, send token to client
+  // 3) If everything ok, send token and user data to client
   createSendToken(user, 200, res);
 };
 
-const isValidLoginRequest = (requestBody) => {
+let isValidLoginRequest = (requestBody) => {
   const { email, password } = requestBody;
-  return email && password;
+  return Boolean(email && password);
 };
 
-const isUserValidated = async (user, password) => { 
-  return user && await user.correctPassword(password, user.password);
+let isUserValidated = async (user, password) => { 
+  return Boolean(await user?.correctPassword(password, user.password));
 };
 
 exports.protect = async (req, res, next) => {
@@ -91,13 +91,14 @@ exports.protect = async (req, res, next) => {
   next();
 };
 
-const getTokenFromHeaders = (headers) => {
-  if (headers.authorization && headers.authorization.startsWith('Bearer')) {
-    return headers.authorization.split(" ")[1];
+let getTokenFromHeaders = (headers) => {
+  if (headers.authorization?.startsWith('Bearer')) {
+    const token = headers.authorization.split(" ")[1];
+    if (token) return token;
   }
   return null;
 };
 
-const decodeToken = async (token) => {
+let decodeToken = async (token) => {
   return await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 };
