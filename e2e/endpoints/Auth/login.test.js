@@ -31,7 +31,6 @@ describe('POST /login tests', () => {
 
   afterEach(() => { 
     jest.clearAllMocks();
-    sinon.restore();
   });
 
   it('should return 400 if request body is not valid', async () => {
