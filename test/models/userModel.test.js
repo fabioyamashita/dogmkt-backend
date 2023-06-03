@@ -3,7 +3,7 @@ const User = require('../../src/models/userModel');
 
 const validUserData = {
   name: "John Doe",
-  email: "john@example.com",
+  email: "johndoeudermodel@example.com",
   password: "password123",
   passwordConfirm: "password123",
 };

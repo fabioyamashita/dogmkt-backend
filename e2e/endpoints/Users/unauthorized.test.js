@@ -1,8 +1,9 @@
 const request = require('supertest');
 const app = require('../../../src/app');
 const userRepository = require('../../../src/repositories/userRepository');
+const userService = require('../../../src/services/userService');
 
-const authToken = "INVALID-TOKEN";
+const authToken = "INVALIDTOKEN";
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
   name: 'John Albert',
@@ -11,6 +12,7 @@ const mockUser = {
 };
 
 userRepository.findById = jest.fn();
+userService.findById = jest.fn();
 
 describe('GET /users/:idUser with a invalid token', () => {
   afterEach(() => { jest.clearAllMocks(); });
@@ -29,10 +31,11 @@ describe('GET /users/:idUser with a invalid token', () => {
     });
   });
 
-  describe('request with an ID that exists', () => {
+  describe('request with an ID that does exists', () => {
     test('should return 401 Unauthorized', async () => {
       // Arrange
-      userRepository.findById.mockResolvedValueOnce(mockUser);
+      process.env.JWT_SECRET = 'secret';
+      userService.findById.mockResolvedValueOnce(null);
   
       // Act
       const response = await request(app)

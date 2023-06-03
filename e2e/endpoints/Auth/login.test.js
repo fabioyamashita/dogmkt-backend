@@ -1,32 +1,30 @@
 const request = require('supertest');
-const userRepository = require('../../../src/repositories/userRepository');
-const userService = require('../../../src/services/userService');
+const mongoose = require('mongoose');
 const app = require('../../../src/app');
-const dotenv = require('dotenv');
-dotenv.config();
+const User = require('../../../src/models/userModel');
 
 const mockUser = { 
   name: 'John Albert',
-  email: 'test@gmail.com',
-  password: '1234',
-  passwordConfirm: '1234',
+  email: 'johnalbertlogin@gmail.com',
+  password: 'admin1234',
+  passwordConfirm: 'admin1234',
   isSeller: false
 };
-
-const mockUserFound = { 
-  id: '12315151560',
-  name: 'John Albert',
-  email: 'test@gmail.com',
-  password: '1234',
-  isSeller: false
-};
-
-userRepository.create = jest.fn();
-userRepository.findByEmailWithPassword = jest.fn();
-userService.findByEmailWithPassword = jest.fn();
 
 describe('POST /login tests', () => {
-  beforeEach(() => {
+  beforeAll(async () => {
+    await mongoose.connect(global.__MONGO_URI__, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+
+  beforeEach(async () => {
+    await User.deleteMany({}).exec();
   });
 
   afterEach(() => { 
@@ -47,17 +45,17 @@ describe('POST /login tests', () => {
     // Assert
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("The request contains malformed data in parameters.");
-    expect(userService.findByEmailWithPassword).not.toHaveBeenCalled();
   });
 
   it('should return 401 if password is not valid', async () => {
     // Arrange
-    const validRequestBody = { 
-      email: 'test@gmail.com',
-      password: '1234'
-    };
+    const existingUser = new User(mockUser);
+    await existingUser.save();
 
-    userRepository.findByEmailWithPassword.mockResolvedValueOnce(mockUserFound);
+    const validRequestBody = { 
+      email: 'johnalbertlogin@gmail.com',
+      password: 'wrongPassword'
+    };
 
     // Act
     const response = await request(app)
@@ -67,25 +65,29 @@ describe('POST /login tests', () => {
     // Assert
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Incorrect email or password!");
-    expect(userService.findByEmailWithPassword).toHaveBeenCalledWith(validRequestBody.email);
   });
 
-  // TODO
-  // it('should return 200 with a token and the user logged in', async () => {
-  //   // Arrange
-  //   const validRequestBody = { 
-  //     email: 'test@gmail.com',
-  //     password: '1234'
-  //   };
+  it('should return 200 with a token and the user logged in', async () => {
+    // Arrange
+    const user = new User(mockUser);
+    await user.save();
 
-  //   userRepository.findByEmailWithPassword.mockResolvedValueOnce(mockUserFound);
+    process.env.JWT_SECRET = 'supersecret';
+    process.env.JWT_EXPIRES_IN = '90d';
 
-  //   // Act
-  //   const response = await request(app)
-  //     .post(`/api/v1/login`)
-  //     .send(validRequestBody);
+    const validRequestBody = { 
+      email: 'johnalbertlogin@gmail.com',
+      password: 'admin1234'
+    };
+  
+    // Act
+    const response = await request(app)
+      .post(`/api/v1/login`)
+      .send(validRequestBody);
 
-  //   // Assert
-  //   expect(response.status).toBe(200);
-  // });
+    // Assert
+    expect(response.status).toBe(200);
+    expect(response.body.data.token).toBeDefined();
+    expect(response.body.data.user).toBeDefined();
+  });
 });

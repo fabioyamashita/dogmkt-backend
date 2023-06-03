@@ -1,6 +1,4 @@
 const rewire = require("rewire");
-const dotenv = require('dotenv');
-dotenv.config();
 
 let authController;
 
