@@ -1,4 +1,3 @@
-const rewire = require("rewire");
 const mongoose = require('mongoose');
 const User = require('../../src/models/userModel');
 
