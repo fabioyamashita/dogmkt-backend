@@ -25,7 +25,7 @@ describe('POST /signup tests', () => {
   });
 
   beforeEach(async () => {
-    await User.deleteMany({}).exec();
+    await User.deleteMany({});
   });
 
   afterEach(() => { 

@@ -4,11 +4,11 @@ const userController = require("../controllers/userController");
 
 const router = express.Router();
 
+router.use(authController.protect);
+
 router
   .route("/:id")
-  .get(
-    authController.protect, 
-    userController.getUserById
-    );
+  .get(userController.getUserById)
+  .patch(userController.updateUserById);
 
 module.exports = router;

@@ -11,3 +11,7 @@ exports.findByEmailWithPassword = async (email) => {
 exports.create = async (userDTO) => {
   return await User.create(userDTO);
 };
+
+exports.updateById = async (id, userDTO) => {
+  return await User.findByIdAndUpdate(id, userDTO, { new: true });
+};

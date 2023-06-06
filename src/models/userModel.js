@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       validate: [validator.isEmail, "Please provide a valid email"],
+      immutable: true,
     },
     isSeller: {
       type: Boolean,
@@ -42,6 +43,7 @@ const userSchema = new mongoose.Schema(
         },
         message: "Passwords are not the same!",
       },
+      select: false,
     },
   },
   {
