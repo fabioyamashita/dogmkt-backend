@@ -109,3 +109,47 @@ describe('userService.create Tests', () => {
     });
   });
 });
+
+describe('userService.updateById Tests', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  userRepository.updateById = jest.fn();
+
+  describe('User successfully updated in userRepository', () => {
+    it('should return the User', async () => {
+      // Arrange
+      const mockUpdatedUser = { 
+        name: 'John Albert',
+        isSeller: false
+      };
+
+      userRepository.updateById.mockResolvedValueOnce(mockUpdatedUser);
+  
+      // Act
+      const user = await userService.updateById("647bee3078f3a53a0362df4f", mockUpdatedUser);
+  
+      // Assert
+      expect(userRepository.updateById).toHaveBeenCalledWith("647bee3078f3a53a0362df4f", mockUpdatedUser);
+      expect(user).toEqual(mockUpdatedUser);
+    });
+  });
+
+  describe('User not successfully updated in userRepository', () => {
+    it('should return null', async () => {
+      // Arrange
+      const mockUpdatedUser = { 
+        name: 'John Albert',
+        isSeller: false
+      };
+
+      userRepository.updateById.mockResolvedValueOnce(null);
+  
+      // Act
+      const user = await userService.updateById("647bee3078f3a53a0362df4f", mockUpdatedUser);
+  
+      // Assert
+      expect(userRepository.updateById).toHaveBeenCalledWith("647bee3078f3a53a0362df4f", mockUpdatedUser);
+      expect(user).toBeNull();
+    });
+  });
+});

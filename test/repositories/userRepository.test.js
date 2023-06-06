@@ -123,3 +123,28 @@ describe('userRepository.create Tests', () => {
     });
   });
 });
+
+describe('userRepository.updateById Tests', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  User.findByIdAndUpdate = jest.fn();
+
+  describe('User successfully updated in DB', () => {
+    it('should return the User', async () => {
+      // Arrange
+      const mockUpdatedUser = { 
+        name: 'John Albert',
+        isSeller: false
+      };
+
+      User.findByIdAndUpdate.mockResolvedValueOnce(mockUpdatedUser);
+      
+      // Act
+      const user = await userRepository.updateById("647bee3078f3a53a0362df4f", mockUpdatedUser);
+  
+      // Assert
+      expect(User.findByIdAndUpdate).toHaveBeenCalledWith("647bee3078f3a53a0362df4f", mockUpdatedUser, { new: true });
+      expect(user).toEqual(mockUpdatedUser);
+    });
+  });
+});
