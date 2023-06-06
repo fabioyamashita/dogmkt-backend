@@ -14,3 +14,8 @@ exports.create = async (userDTO) => {
   let user = await userRepository.create(userDTO);
   return user;
 };
+
+exports.updateById = async (id, userDTO) => {
+  let user = await userRepository.updateById(id, userDTO);
+  return user;
+};

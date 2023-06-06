@@ -63,7 +63,7 @@ app.use("/api/v1/users", userRouter);
 app.use(globalErrorHandler);
 
 // Send General 404 response if URL is not found
-app.get('*', function(req, res){
+app.all('*', function(req, res){
   res.status(404).send({
     code: "ERR-404",
     message: "That's an error.",
