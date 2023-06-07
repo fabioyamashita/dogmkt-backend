@@ -32,6 +32,7 @@ describe('PATCH /users/{idUser} tests', () => {
 
   afterAll(async () => {
     await mongoose.connection.close();
+    authController.protect.restore();
   });
 
   beforeEach(async () => {
