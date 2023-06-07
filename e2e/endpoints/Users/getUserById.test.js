@@ -1,22 +1,28 @@
 const request = require('supertest');
+const mongoose = require('mongoose');
+const User = require('../../../src/models/userModel');
 const sinon = require("sinon");
-const userRepository = require('../../../src/repositories/userRepository');
 const authController = require('../../../src/controllers/authController');
 
 let app;
+
 const authToken = "VALID-TOKEN";
 const mockUser = { 
-  id: '64617c4eac31a04063dcffc2', 
   name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com'
+  email: 'johnalbertgetuserid@gmail.com',
+  password: 'test1234',
+  passwordConfirm: 'test1234',
+  isSeller: false
 };
 
-userRepository.findById = jest.fn();
-
 describe('GET /users/:idUser with a valid token', () => {
+  beforeAll(async () => {
+    await mongoose.connect(global.__MONGO_URI__, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-  beforeEach(() => {
+    // Bypass authController.protect middleware
     sinon.stub(authController, 'protect')
       .callsFake(function(req, res, next) {
           return next();
@@ -25,40 +31,59 @@ describe('GET /users/:idUser with a valid token', () => {
     app = require('../../../src/app');
   });
 
+  afterAll(async () => {
+    await mongoose.connection.close();
+    authController.protect.restore();
+  });
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
   afterEach(() => { 
     jest.clearAllMocks();
-    authController.protect.restore();
   });
 
   describe('request with an ID that exists', () => {
     test('should return 200 OK and send User in response body', async () => {
       // Arrange
-      userRepository.findById.mockResolvedValueOnce(mockUser);
+      const existingUser = new User(mockUser);
+      await existingUser.save();
+
+      const userFound = { 
+        id: existingUser._id.toString(),
+        name: 'John Albert',
+        email: 'johnalbertgetuserid@gmail.com',
+        isSeller: false
+      };
   
       // Act
       const response = await request(app)
-        .get(`/api/v1/users/${mockUser.id}`)
+        .get(`/api/v1/users/${existingUser._id}`)
         .set('Authorization', 'Bearer ' + authToken);
   
       // Assert
       expect(response.status).toBe(200);
-      expect(response.body.data).toEqual(mockUser);
-      expect(userRepository.findById).toHaveBeenCalledWith(mockUser.id); 
+      expect(response.body.data).toEqual(userFound);
     });
   });
 
   describe('request with an ID that does not exists', () => {
     test('it should return 404 Not Found', async () => {
       // Arrange
-      userRepository.findById.mockResolvedValueOnce(null);
+      const existingUser = new User(mockUser);
+      await existingUser.save();
+
+      const nonExistingUserId = '5f9c2b8d2a8d0b1d1c9c9c9c';
       
       // Act
       const response = await request(app)
-        .get(`/api/v1/users/${mockUser.id}`)
+        .get(`/api/v1/users/${nonExistingUserId}`)
         .set('Authorization', 'Bearer ' + authToken);
   
       // Assert
       expect(response.status).toBe(404);
+      expect(response.body.message).toBe('No user found with that ID.');
     });
   });
 });
