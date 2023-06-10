@@ -33,12 +33,8 @@ paths:
                     description: Dog Collection retrieved.
                     items:
                       $ref: '#/components/schemas/Dog'
-                      x-stoplight:
-                        id: ji0exgkvs455c
                   pagination:
                     $ref: '#/components/schemas/Pagination'
-                    x-stoplight:
-                      id: nv6acu2u954sa
                 required:
                   - data
                   - pagination
@@ -51,7 +47,7 @@ paths:
                         availableQuantity: 5
                         name: Admin Dog
                         breed: Others
-                        genre: Male
+                        genre: male
                         price: 5000
                         description: Admin Dog.
                         dateOfBirth: '2001-01-01'
@@ -76,7 +72,7 @@ paths:
                         availableQuantity: 5
                         name: Admin Dog
                         breed: Others
-                        genre: Male
+                        genre: male
                         price: 5210.25
                         description: Admin Dog.
                         dateOfBirth: '2001-01-01'
@@ -130,7 +126,35 @@ paths:
                     message: Internal server error.
                     details: There was a problem processing your request. Please try again later.
       operationId: get-dogs
-      description: Retrieve a collection of Dogs in sale.
+      description: |-
+        Retrieve a collection of Dogs in sale.
+
+        ---
+
+        If 'page' and 'limit' are not provided, they will use default values.
+
+        <table border="1" style="width: 50%; word-wrap: break-word;">
+          <tr>
+            <th align="center">Field</th>
+            <th align="center">Description</th>
+            <th align="center">Default Value</th>
+          </tr>
+          <tr>
+            <td align="center">page</td>
+            <td align="center">Current page.</td>
+            <td align="center">1</td>
+          </tr>
+          <tr>
+            <td align="center">limit</td>
+            <td align="center">Number of dogs per page.</td>
+            <td align="center">15</td>
+          </tr>
+          <tr>
+            <td align="center">idSeller</td>
+            <td align="center">Filter dogs by seller ID.</td>
+            <td align="center">-</td>
+          </tr>
+        </table>
       security:
         - Token: []
       parameters:
@@ -144,18 +168,18 @@ paths:
             type: integer
             example: 5
             minimum: 1
+            default: 1
           in: query
           name: page
           description: The page number of the results to retrieve.
-          required: true
         - schema:
             type: integer
             example: 25
             minimum: 1
+            default: 15
           in: query
           name: limit
           description: The maximum number of results to return in each request.
-          required: true
     post:
       summary: Create a Dog
       operationId: post-dogs
@@ -169,8 +193,6 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Dog'
-                    x-stoplight:
-                      id: xepjj9rum38vs
               examples:
                 Example 1:
                   value:
@@ -180,7 +202,7 @@ paths:
                       availableQuantity: 5
                       name: Admin Dog
                       breed: Others
-                      genre: Male
+                      genre: male
                       price: 5000
                       description: Admin Dog.
                       dateOfBirth: '2001-01-01'
@@ -303,8 +325,6 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Dog'
-                    x-stoplight:
-                      id: vk19lp1jwybyw
                 required:
                   - data
               examples:
@@ -316,7 +336,7 @@ paths:
                       availableQuantity: 5
                       name: Admin Dog
                       breed: Others
-                      genre: Male
+                      genre: male
                       price: 5000
                       description: Admin Dog.
                       dateOfBirth: '2001-01-01'
@@ -462,7 +482,7 @@ paths:
                       availableQuantity: 5
                       name: Admin Dog
                       breed: Others
-                      genre: Male
+                      genre: male
                       price: 5000
                       description: Admin Dog.
                       dateOfBirth: '2001-01-01'
@@ -582,8 +602,6 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/User'
-                    x-stoplight:
-                      id: vk19lp1jwybyw
                 required:
                   - data
               examples:
@@ -732,7 +750,12 @@ paths:
                     details: There was a problem processing your request. Please try again later.
       tags:
         - Users
-      description: Update a User.
+      description: |-
+        Update a User.
+
+        ---
+
+        <i>PS.: You cannot update the 'password' and 'email' fields using this endpoint.</i>
       security:
         - Token: []
       requestBody:
@@ -902,7 +925,7 @@ paths:
                     code: ERR-500
                     message: Internal server error.
                     details: There was a problem processing your request. Please try again later.
-      description: Login with username and password.
+      description: Login with username and password to retrieve a JWT Token and the User.
       requestBody:
         content:
           application/json:
@@ -941,8 +964,6 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Cart'
-                    x-stoplight:
-                      id: vk19lp1jwybyw
                 required:
                   - data
               examples:
@@ -1432,7 +1453,7 @@ components:
           availableQuantity: 5
           name: Admin Dog
           breed: Others
-          genre: Male
+          genre: male
           price: 5000
           description: Admin Dog.
           dateOfBirth: '2001-01-01'
@@ -1474,11 +1495,11 @@ components:
           type: string
           x-stoplight:
             id: bdzd2x5fms2nn
-          enum:
-            - Male
-            - Female
-          example: Male
+          example: male
           description: The gender of the dog.
+          enum:
+            - male
+            - female
         price:
           type: number
           x-stoplight:
@@ -1497,30 +1518,31 @@ components:
             id: g3kre0wi9l493
           example: '2001-01-01'
           description: The dog's date of birth.
+          format: date
         weight:
           type: number
           x-stoplight:
             id: zit86if6q92m8
           example: 50
-          minimum: 0
-          exclusiveMinimum: true
+          exclusiveMinimum: false
           description: The weight of the dog in kilograms.
+          minimum: 0.01
         height:
           type: number
           x-stoplight:
             id: lcg6aiocgsqxw
           example: 60
-          minimum: 0
-          exclusiveMinimum: true
+          exclusiveMinimum: false
           description: The height of the dog in centimeters.
+          minimum: 1
         width:
           type: number
           x-stoplight:
             id: 7l3jvsu5925c4
           example: 50
-          minimum: 0
-          exclusiveMinimum: true
+          exclusiveMinimum: false
           description: The width of the dog in centimeters.
+          minimum: 1
         pictureUrl:
           type: string
           x-stoplight:
@@ -1813,8 +1835,6 @@ components:
           description: The dogs added to cart.
           items:
             $ref: '#/components/schemas/DogsCart'
-            x-stoplight:
-              id: s0ixc2hw8x7xi
       required:
         - id
         - idUser
@@ -2003,6 +2023,25 @@ components:
         id: 64zfy5pcancy5
       type: object
       description: General pagination model.
+      x-examples:
+        Example 1:
+          first: 1
+          last: 4
+          previous: 1
+          next: 3
+          page: 2
+          isFirst: true
+          isLast: false
+          totalElements: 8
+        Example 2:
+          first: 1
+          last: 1
+          previous: null
+          next: null
+          page: 1
+          isFirst: true
+          isLast: true
+          totalElements: 2
       properties:
         first:
           type: integer
@@ -2022,16 +2061,16 @@ components:
           type: integer
           x-stoplight:
             id: hgirm55xdmoye
-          minimum: 1
           description: The previous page in the pagination sequence.
           example: 1
+          nullable: true
         next:
           type: integer
           x-stoplight:
             id: qx5yhdw9d18tu
-          minimum: 1
           example: 3
           description: The next page in the pagination sequence.
+          nullable: true
         page:
           type: integer
           x-stoplight:
@@ -2065,16 +2104,6 @@ components:
         - isFirst
         - isLast
         - totalElements
-      x-examples:
-        Example 1:
-          first: 1
-          last: 50
-          previous: 1
-          next: 3
-          page: 2
-          isFirst: true
-          isLast: true
-          totalElements: 8
     Error:
       title: Error
       x-stoplight:
