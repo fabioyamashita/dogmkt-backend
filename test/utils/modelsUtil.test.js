@@ -24,4 +24,25 @@ describe('modelsUtil tests', () => {
       expect(isValidUrl).toBe(false);
     });
   });
+
+  describe('transformModelOutput tests', () => {
+    it('should transform model output', () => {
+      // Arrange
+      const doc = {
+        _id: '123',
+        __v: 0,
+        name: 'John Doe',
+      };
+
+      const ret = {};
+
+      // Act
+      ModelUtils.transformModelOutput(doc, ret);
+
+      // Assert
+      expect(ret).toHaveProperty('id');
+      expect(ret).not.toHaveProperty('_id');
+      expect(ret).not.toHaveProperty('__v');
+    });
+  });
 });

@@ -1,12 +1,6 @@
 const mongoose = require("mongoose");
 const ModelUtils = require("../utils/modelsUtil");
 
-const transformUserModelOutput = function (doc, ret) {
-  ret.id = ret._id;
-  delete ret._id;
-  delete ret.__v;
-};
-
 const dogSchema = new mongoose.Schema(
   {
     idSeller: {
@@ -77,11 +71,11 @@ const dogSchema = new mongoose.Schema(
   {
     toJSON: {
       virtuals: true,
-      transform: transformUserModelOutput,
+      transform: ModelUtils.transformModelOutput,
     },
     toObject: { 
       virtuals: true, 
-      transform: transformUserModelOutput 
+      transform: ModelUtils.transformModelOutput 
     },
   }
 );

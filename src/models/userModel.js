@@ -2,12 +2,7 @@ const crypto = require("crypto");
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-
-const transformUserModelOutput = function (doc, ret) {
-  ret.id = ret._id;
-  delete ret._id;
-  delete ret.__v;
-};
+const ModelUtils = require("../utils/modelsUtil");
 
 const userSchema = new mongoose.Schema(
   {
@@ -49,11 +44,11 @@ const userSchema = new mongoose.Schema(
   {
     toJSON: {
       virtuals: true,
-      transform: transformUserModelOutput,
+      transform: ModelUtils.transformModelOutput,
     },
     toObject: { 
       virtuals: true, 
-      transform: transformUserModelOutput 
+      transform: ModelUtils.transformModelOutput 
     },
   }
 );
