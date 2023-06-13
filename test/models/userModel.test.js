@@ -8,7 +8,7 @@ const validUserData = {
   passwordConfirm: "password123",
 };
 
-describe('insert', () => {
+describe('userModel tests', () => {
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, {
       useNewUrlParser: true,
