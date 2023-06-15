@@ -281,7 +281,7 @@ paths:
                   availableQuantity: 5
                   name: Admin Dog
                   breed: Others
-                  genre: Male
+                  genre: male
                   price: 5000
                   description: Admin Dog.
                   dateOfBirth: '2001-01-01'
@@ -295,7 +295,7 @@ paths:
                   availableQuantity: 5
                   name: Admin Dog
                   breed: Others
-                  genre: Male
+                  genre: male
                   price: 5000
                   description: Admin Dog.
                   dateOfBirth: '2001-01-01'
@@ -568,7 +568,7 @@ paths:
                   availableQuantity: 5
                   name: Admin Dog
                   breed: Others
-                  genre: Male
+                  genre: male
                   price: 5000
                   description: Admin Dog.
                   dateOfBirth: '2001-01-01'
@@ -1575,7 +1575,7 @@ components:
           availableQuantity: 5
           name: Admin Dog
           breed: Others
-          genre: Male
+          genre: male
           price: 5000
           description: Admin Dog.
           dateOfBirth: '2001-01-01'
@@ -1613,11 +1613,11 @@ components:
           type: string
           x-stoplight:
             id: bdzd2x5fms2nn
-          enum:
-            - Male
-            - Female
-          example: Male
+          example: male
           description: The gender of the dog.
+          enum:
+            - male
+            - female
         price:
           type: number
           x-stoplight:
@@ -1690,7 +1690,7 @@ components:
           availableQuantity: 5
           name: Admin Dog
           breed: Others
-          genre: Male
+          genre: male
           price: 5000
           description: Admin Dog.
           dateOfBirth: '2001-01-01'
@@ -1728,11 +1728,11 @@ components:
           type: string
           x-stoplight:
             id: bdzd2x5fms2nn
-          enum:
-            - Male
-            - Female
-          example: Male
+          example: male
           description: The gender of the dog.
+          enum:
+            - male
+            - female
         price:
           type: number
           x-stoplight:

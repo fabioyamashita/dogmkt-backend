@@ -41,17 +41,11 @@
                       "type": "array",
                       "description": "Dog Collection retrieved.",
                       "items": {
-                        "$ref": "#/components/schemas/Dog",
-                        "x-stoplight": {
-                          "id": "ji0exgkvs455c"
-                        }
+                        "$ref": "#/components/schemas/Dog"
                       }
                     },
                     "pagination": {
-                      "$ref": "#/components/schemas/Pagination",
-                      "x-stoplight": {
-                        "id": "nv6acu2u954sa"
-                      }
+                      "$ref": "#/components/schemas/Pagination"
                     }
                   },
                   "required": [
@@ -69,7 +63,7 @@
                           "availableQuantity": 5,
                           "name": "Admin Dog",
                           "breed": "Others",
-                          "genre": "Male",
+                          "genre": "male",
                           "price": 5000,
                           "description": "Admin Dog.",
                           "dateOfBirth": "2001-01-01",
@@ -100,7 +94,7 @@
                           "availableQuantity": 5,
                           "name": "Admin Dog",
                           "breed": "Others",
-                          "genre": "Male",
+                          "genre": "male",
                           "price": 5210.25,
                           "description": "Admin Dog.",
                           "dateOfBirth": "2001-01-01",
@@ -185,7 +179,7 @@
           }
         },
         "operationId": "get-dogs",
-        "description": "Retrieve a collection of Dogs in sale.",
+        "description": "Retrieve a collection of Dogs in sale.\n\n---\n\nIf 'page' and 'limit' are not provided, they will use default values.\n\n<table border=\"1\" style=\"width: 50%; word-wrap: break-word;\">\n  <tr>\n    <th align=\"center\">Field</th>\n    <th align=\"center\">Description</th>\n    <th align=\"center\">Default Value</th>\n  </tr>\n  <tr>\n    <td align=\"center\">page</td>\n    <td align=\"center\">Current page.</td>\n    <td align=\"center\">1</td>\n  </tr>\n  <tr>\n    <td align=\"center\">limit</td>\n    <td align=\"center\">Number of dogs per page.</td>\n    <td align=\"center\">15</td>\n  </tr>\n  <tr>\n    <td align=\"center\">idSeller</td>\n    <td align=\"center\">Filter dogs by seller ID.</td>\n    <td align=\"center\">-</td>\n  </tr>\n</table>",
         "security": [
           {
             "Token": []
@@ -205,23 +199,23 @@
             "schema": {
               "type": "integer",
               "example": 5,
-              "minimum": 1
+              "minimum": 1,
+              "default": 1
             },
             "in": "query",
             "name": "page",
-            "description": "The page number of the results to retrieve.",
-            "required": true
+            "description": "The page number of the results to retrieve."
           },
           {
             "schema": {
               "type": "integer",
               "example": 25,
-              "minimum": 1
+              "minimum": 1,
+              "default": 15
             },
             "in": "query",
             "name": "limit",
-            "description": "The maximum number of results to return in each request.",
-            "required": true
+            "description": "The maximum number of results to return in each request."
           }
         ]
       },
@@ -237,10 +231,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Dog",
-                      "x-stoplight": {
-                        "id": "xepjj9rum38vs"
-                      }
+                      "$ref": "#/components/schemas/Dog"
                     }
                   }
                 },
@@ -253,7 +244,7 @@
                         "availableQuantity": 5,
                         "name": "Admin Dog",
                         "breed": "Others",
-                        "genre": "Male",
+                        "genre": "male",
                         "price": 5000,
                         "description": "Admin Dog.",
                         "dateOfBirth": "2001-01-01",
@@ -376,7 +367,7 @@
                     "availableQuantity": 5,
                     "name": "Admin Dog",
                     "breed": "Others",
-                    "genre": "Male",
+                    "genre": "male",
                     "price": 5000,
                     "description": "Admin Dog.",
                     "dateOfBirth": "2001-01-01",
@@ -392,7 +383,7 @@
                     "availableQuantity": 5,
                     "name": "Admin Dog",
                     "breed": "Others",
-                    "genre": "Male",
+                    "genre": "male",
                     "price": 5000,
                     "description": "Admin Dog.",
                     "dateOfBirth": "2001-01-01",
@@ -433,10 +424,7 @@
                   "description": "The object result of the request.",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Dog",
-                      "x-stoplight": {
-                        "id": "vk19lp1jwybyw"
-                      }
+                      "$ref": "#/components/schemas/Dog"
                     }
                   },
                   "required": [
@@ -452,7 +440,7 @@
                         "availableQuantity": 5,
                         "name": "Admin Dog",
                         "breed": "Others",
-                        "genre": "Male",
+                        "genre": "male",
                         "price": 5000,
                         "description": "Admin Dog.",
                         "dateOfBirth": "2001-01-01",
@@ -678,7 +666,7 @@
                         "availableQuantity": 5,
                         "name": "Admin Dog",
                         "breed": "Others",
-                        "genre": "Male",
+                        "genre": "male",
                         "price": 5000,
                         "description": "Admin Dog.",
                         "dateOfBirth": "2001-01-01",
@@ -813,7 +801,7 @@
                     "availableQuantity": 5,
                     "name": "Admin Dog",
                     "breed": "Others",
-                    "genre": "Male",
+                    "genre": "male",
                     "price": 5000,
                     "description": "Admin Dog.",
                     "dateOfBirth": "2001-01-01",
@@ -860,10 +848,7 @@
                   "description": "The object result of the request.",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/User",
-                      "x-stoplight": {
-                        "id": "vk19lp1jwybyw"
-                      }
+                      "$ref": "#/components/schemas/User"
                     }
                   },
                   "required": [
@@ -1104,7 +1089,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Update a User.",
+        "description": "Update a User.\n\n---\n\n<i>PS.: You cannot update the 'password' and 'email' fields using this endpoint.</i>",
         "security": [
           {
             "Token": []
@@ -1365,7 +1350,7 @@
             }
           }
         },
-        "description": "Login with username and password.",
+        "description": "Login with username and password to retrieve a JWT Token and the User.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1418,10 +1403,7 @@
                   "description": "The object result of the request.",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Cart",
-                      "x-stoplight": {
-                        "id": "vk19lp1jwybyw"
-                      }
+                      "$ref": "#/components/schemas/Cart"
                     }
                   },
                   "required": [
@@ -2191,7 +2173,7 @@
             "availableQuantity": 5,
             "name": "Admin Dog",
             "breed": "Others",
-            "genre": "Male",
+            "genre": "male",
             "price": 5000,
             "description": "Admin Dog.",
             "dateOfBirth": "2001-01-01",
@@ -2245,12 +2227,12 @@
             "x-stoplight": {
               "id": "bdzd2x5fms2nn"
             },
+            "example": "male",
+            "description": "The gender of the dog.",
             "enum": [
-              "Male",
-              "Female"
-            ],
-            "example": "Male",
-            "description": "The gender of the dog."
+              "male",
+              "female"
+            ]
           },
           "price": {
             "type": "number",
@@ -2274,7 +2256,8 @@
               "id": "g3kre0wi9l493"
             },
             "example": "2001-01-01",
-            "description": "The dog's date of birth."
+            "description": "The dog's date of birth.",
+            "format": "date"
           },
           "weight": {
             "type": "number",
@@ -2282,9 +2265,9 @@
               "id": "zit86if6q92m8"
             },
             "example": 50,
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "description": "The weight of the dog in kilograms."
+            "exclusiveMinimum": false,
+            "description": "The weight of the dog in kilograms.",
+            "minimum": 0.01
           },
           "height": {
             "type": "number",
@@ -2292,9 +2275,9 @@
               "id": "lcg6aiocgsqxw"
             },
             "example": 60,
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "description": "The height of the dog in centimeters."
+            "exclusiveMinimum": false,
+            "description": "The height of the dog in centimeters.",
+            "minimum": 1
           },
           "width": {
             "type": "number",
@@ -2302,9 +2285,9 @@
               "id": "7l3jvsu5925c4"
             },
             "example": 50,
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "description": "The width of the dog in centimeters."
+            "exclusiveMinimum": false,
+            "description": "The width of the dog in centimeters.",
+            "minimum": 1
           },
           "pictureUrl": {
             "type": "string",
@@ -2344,7 +2327,7 @@
             "availableQuantity": 5,
             "name": "Admin Dog",
             "breed": "Others",
-            "genre": "Male",
+            "genre": "male",
             "price": 5000,
             "description": "Admin Dog.",
             "dateOfBirth": "2001-01-01",
@@ -2393,12 +2376,12 @@
             "x-stoplight": {
               "id": "bdzd2x5fms2nn"
             },
+            "example": "male",
+            "description": "The gender of the dog.",
             "enum": [
-              "Male",
-              "Female"
-            ],
-            "example": "Male",
-            "description": "The gender of the dog."
+              "male",
+              "female"
+            ]
           },
           "price": {
             "type": "number",
@@ -2490,7 +2473,7 @@
             "availableQuantity": 5,
             "name": "Admin Dog",
             "breed": "Others",
-            "genre": "Male",
+            "genre": "male",
             "price": 5000,
             "description": "Admin Dog.",
             "dateOfBirth": "2001-01-01",
@@ -2539,12 +2522,12 @@
             "x-stoplight": {
               "id": "bdzd2x5fms2nn"
             },
+            "example": "male",
+            "description": "The gender of the dog.",
             "enum": [
-              "Male",
-              "Female"
-            ],
-            "example": "Male",
-            "description": "The gender of the dog."
+              "male",
+              "female"
+            ]
           },
           "price": {
             "type": "number",
@@ -2681,10 +2664,7 @@
             "type": "array",
             "description": "The dogs added to cart.",
             "items": {
-              "$ref": "#/components/schemas/DogsCart",
-              "x-stoplight": {
-                "id": "s0ixc2hw8x7xi"
-              }
+              "$ref": "#/components/schemas/DogsCart"
             }
           }
         },
@@ -2940,6 +2920,28 @@
         },
         "type": "object",
         "description": "General pagination model.",
+        "x-examples": {
+          "Example 1": {
+            "first": 1,
+            "last": 4,
+            "previous": 1,
+            "next": 3,
+            "page": 2,
+            "isFirst": true,
+            "isLast": false,
+            "totalElements": 8
+          },
+          "Example 2": {
+            "first": 1,
+            "last": 1,
+            "previous": null,
+            "next": null,
+            "page": 1,
+            "isFirst": true,
+            "isLast": true,
+            "totalElements": 2
+          }
+        },
         "properties": {
           "first": {
             "type": "integer",
@@ -2964,18 +2966,18 @@
             "x-stoplight": {
               "id": "hgirm55xdmoye"
             },
-            "minimum": 1,
             "description": "The previous page in the pagination sequence.",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "next": {
             "type": "integer",
             "x-stoplight": {
               "id": "qx5yhdw9d18tu"
             },
-            "minimum": 1,
             "example": 3,
-            "description": "The next page in the pagination sequence."
+            "description": "The next page in the pagination sequence.",
+            "nullable": true
           },
           "page": {
             "type": "integer",
@@ -3019,19 +3021,7 @@
           "isFirst",
           "isLast",
           "totalElements"
-        ],
-        "x-examples": {
-          "Example 1": {
-            "first": 1,
-            "last": 50,
-            "previous": 1,
-            "next": 3,
-            "page": 2,
-            "isFirst": true,
-            "isLast": true,
-            "totalElements": 8
-          }
-        }
+        ]
       },
       "Error": {
         "title": "Error",
