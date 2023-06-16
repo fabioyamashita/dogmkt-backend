@@ -4,7 +4,7 @@ const ModelUtils = require("../utils/modelsUtil");
 const dogSchema = new mongoose.Schema(
   {
     idSeller: {
-      type: String,
+      type: mongoose.Types.ObjectId,
       required: [true, "Please, tell us the id of the seller."],
     },
     availableQuantity: {
@@ -72,13 +72,19 @@ const dogSchema = new mongoose.Schema(
     toJSON: {
       virtuals: true,
       transform: ModelUtils.transformModelOutput,
+      getters: true,
     },
     toObject: { 
       virtuals: true, 
-      transform: ModelUtils.transformModelOutput 
+      transform: ModelUtils.transformModelOutput,
+      getters: true,
     },
   }
 );
+
+dogSchema.path('dateOfBirth').get(function (value) {
+  return value.toISOString().split('T')[0];
+});
 
 const Dog = mongoose.model("Dog", dogSchema);
 

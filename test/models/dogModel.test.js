@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Dog = require('../../src/models/dogModel');
 
 const validDogData = {
-  idSeller: "5f8d0b2b4f4d4b1b3c6f1b1a",
+  idSeller: new mongoose.Types.ObjectId("5f8d0b2b4f4d4b1b3c6f1b1a"),
   availableQuantity: 5,
   name: "Cute Dog",
   breed: "Samoyed",
