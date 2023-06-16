@@ -13,6 +13,7 @@ const swaggerDocument = require('../swagger.json');
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 const authRouter = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
+const dogRouter = require("./routes/dogRoutes");
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use(
 // ROUTES
 app.use("/api/v1", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/dogs", dogRouter);
 
 // Global Error handling middleware
 app.use(globalErrorHandler);
