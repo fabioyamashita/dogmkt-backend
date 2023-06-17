@@ -198,7 +198,7 @@ describe('dogModel tests', () => {
     expect(error.errors.price).toHaveProperty("message", "Price must be greater than or equal to 0.");   
   });
 
-  it('should fail to save a dog with a weight less than 0.01 kg', async () => {
+  it('should fail to save a dog with a weight lower than 0.01 kg', async () => {
     // Arrange
     const invalidDogData = {
       weight: -1,
@@ -221,7 +221,7 @@ describe('dogModel tests', () => {
     expect(error.errors.weight).toHaveProperty("message", "Weight must be greater than or equal to 0.01 kg.");      
   });
 
-  it('should fail to save a dog with a height than 1 cm', async () => {
+  it('should fail to save a dog with a height lower than 1 cm', async () => {
     // Arrange
     const invalidDogData = {
       height: -1,
@@ -244,7 +244,7 @@ describe('dogModel tests', () => {
     expect(error.errors.height).toHaveProperty("message", "Height must be greater than or equal to 1 cm.");      
   });
 
-  it('should fail to save a dog with a width than 1 cm', async () => {
+  it('should fail to save a dog with a width lower than 1 cm', async () => {
     // Arrange
     const invalidDogData = {
       width: -1,
