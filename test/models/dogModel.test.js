@@ -62,6 +62,17 @@ describe('dogModel tests', () => {
     expect(transformedDog).not.toHaveProperty('__v');
   });
 
+  it('should transform the dateOfBirth field to yyyy-MM-dd format', () => {
+    // Arrange
+    const dog = new Dog(validDogData);
+
+    // Act
+    const transformedDog = dog.toObject();
+
+    // Assert
+    expect(transformedDog.dateOfBirth).toBe('2020-10-18');
+  });
+
   it('should fail to save a dog with missing required fields', async () => {
     // Arrange
     const invalidDogData = {
