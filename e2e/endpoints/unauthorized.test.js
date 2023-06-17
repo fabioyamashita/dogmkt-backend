@@ -12,40 +12,74 @@ const authToken = "INVALIDTOKEN";
 
 userRepository.findById = jest.fn();
 userService.findById = jest.fn();
+userRepository.updateById = jest.fn();
+userService.updateById = jest.fn();
 dogRepository.create = jest.fn();
 dogService.create = jest.fn();
 
 describe('GET /users/:idUser tests', () => {
   afterEach(() => { jest.clearAllMocks(); });
 
-  describe('request without a Bearer token in header', () => {
-    test('should return 401 Unauthorized', async () => {
-      // Arrange
-      userRepository.findById.mockResolvedValueOnce(mockUser);
-  
-      // Act
-      const response = await request(app)
-        .get(`/api/v1/users/${mockUser.id}`);
-        
-      // Assert
-      expect(response.status).toBe(401);
-    });
+  it('should return 401 Unauthorized with a request without a Bearer token in header', async () => {
+    // Arrange
+    userRepository.findById.mockResolvedValueOnce(mockUser);
+
+    // Act
+    const response = await request(app)
+      .get(`/api/v1/users/${mockUser.id}`);
+      
+    // Assert
+    expect(response.status).toBe(401);
   });
 
-  describe('request with an ID that does exists', () => {
-    test('should return 401 Unauthorized', async () => {
-      // Arrange
-      process.env.JWT_SECRET = 'secret';
-      userService.findById.mockResolvedValueOnce(null);
+  it('should return 401 Unauthorized with a request with an invalid Bearer token in header', async () => {
+    // Arrange
+    process.env.JWT_SECRET = 'secret';
+    userService.findById.mockResolvedValueOnce(null);
+
+    // Act
+    const response = await request(app)
+      .get(`/api/v1/users/${mockUser.id}`)
+      .set('Authorization', 'Bearer ' + authToken);
+      
+    // Assert
+    expect(response.status).toBe(401);
+  });
+});
+
+describe('PATCH /users/:idUser tests', () => {
+  afterEach(() => { jest.clearAllMocks(); });
+
+  const updatedUser = {
+    name: 'John Albert 2',
+    isSeller: true
+  };
   
-      // Act
-      const response = await request(app)
-        .get(`/api/v1/users/${mockUser.id}`)
-        .set('Authorization', 'Bearer ' + authToken);
-        
-      // Assert
-      expect(response.status).toBe(401);
-    });
+  it('should return 401 Unauthorized with a request without a Bearer token in header', async () => {
+    // Arrange
+    userRepository.updateById.mockResolvedValueOnce(mockUser);
+
+    // Act
+    const response = await request(app)
+      .patch(`/api/v1/users/${mockUser.id}`)
+      .send(updatedUser);
+
+    // Assert
+    expect(response.status).toBe(401);
+  });
+
+  it('should return 401 Unauthorized with a request with an invalid Bearer token in header', async () => {
+    // Arrange
+    userRepository.updateById.mockResolvedValueOnce(null);
+
+    // Act
+    const response = await request(app)
+      .patch(`/api/v1/users/${mockUser.id}`)
+      .set('Authorization', 'Bearer ' + authToken)
+      .send(updatedUser);
+
+    // Assert
+    expect(response.status).toBe(401);
   });
 });
 
