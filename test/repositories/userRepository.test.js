@@ -1,5 +1,5 @@
 const User = require("../../src/models/userModel");
-const userRepository = require("../../src/services/userService");
+const userRepository = require("../../src/repositories/userRepository");
 const sinon = require("sinon");
 
 const mockUser = { 

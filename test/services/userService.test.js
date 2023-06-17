@@ -1,5 +1,5 @@
 const userService = require('../../src/services/userService');
-const userRepository = require("../../src/services/userService");
+const userRepository = require("../../src/repositories/userRepository");
 
 const mockUser = { 
   id: '64617c4eac31a04063dcffc2', 
