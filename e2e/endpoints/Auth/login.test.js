@@ -3,13 +3,7 @@ const mongoose = require('mongoose');
 const app = require('../../../src/app');
 const User = require('../../../src/models/userModel');
 
-const mockUser = { 
-  name: 'John Albert',
-  email: 'johnalbertlogin@gmail.com',
-  password: 'admin1234',
-  passwordConfirm: 'admin1234',
-  isSeller: false
-};
+const { mockUserRequestBody: mockUser } = require('../../../test/mocks/user.mock');
 
 describe('POST /login tests', () => {
   beforeAll(async () => {
@@ -76,8 +70,8 @@ describe('POST /login tests', () => {
     process.env.JWT_EXPIRES_IN = '90d';
 
     const validRequestBody = { 
-      email: 'johnalbertlogin@gmail.com',
-      password: 'admin1234'
+      email: mockUser.email,
+      password: mockUser.password
     };
   
     // Act

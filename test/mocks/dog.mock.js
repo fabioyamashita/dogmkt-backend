@@ -17,4 +17,4 @@ const mockDog = {
 
 module.exports = {
   mockDog,
-}
+};

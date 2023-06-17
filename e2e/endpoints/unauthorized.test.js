@@ -6,14 +6,9 @@ const dogRepository = require('../../src/repositories/dogRepository');
 const dogService = require('../../src/services/dogService');
 
 const { mockDog } = require('../../test/mocks/dog.mock');
+const { mockUserDB: mockUser } = require('../../test/mocks/user.mock');
 
 const authToken = "INVALIDTOKEN";
-const mockUser = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com'
-};
 
 userRepository.findById = jest.fn();
 userService.findById = jest.fn();

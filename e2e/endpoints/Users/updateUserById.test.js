@@ -4,17 +4,13 @@ const User = require('../../../src/models/userModel');
 const sinon = require("sinon");
 const authController = require('../../../src/controllers/authController');
 
+const { mockUserRequestBody: mockUser } = require('../../../test/mocks/user.mock');
+
 let app;
 
-const mockUser = { 
-  name: 'John Albert',
-  email: 'johnalbertuser@gmail.com',
-  password: 'test1234',
-  passwordConfirm: 'test1234',
-  isSeller: false
-};
-
 describe('PATCH /users/{idUser} tests', () => {
+  let existingUser;
+
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, {
       useNewUrlParser: true,
@@ -37,6 +33,8 @@ describe('PATCH /users/{idUser} tests', () => {
 
   beforeEach(async () => {
     await User.deleteMany({});
+    existingUser = new User(mockUser);
+    await existingUser.save();
   });
 
   afterEach(() => { 
@@ -45,9 +43,6 @@ describe('PATCH /users/{idUser} tests', () => {
 
   it('should return 200 if the user is successfully updated', async () => {
     // Arrange
-    const existingUser = new User(mockUser);
-    await existingUser.save();
-
     const updatedUser = {
       name: 'John Albert 2',
       isSeller: true
@@ -66,9 +61,6 @@ describe('PATCH /users/{idUser} tests', () => {
 
   it('should return 400 if the request body contains a password property', async () => {
     // Arrange
-    const existingUser = new User(mockUser);
-    await existingUser.save();
-
     const updatedUser = {
       name: 'John Albert 2',
       isSeller: true,
@@ -87,9 +79,6 @@ describe('PATCH /users/{idUser} tests', () => {
 
   it('should return 400 if the request body contains an email property', async () => {
     // Arrange
-    const existingUser = new User(mockUser);
-    await existingUser.save();
-
     const updatedUser = {
       name: 'John Albert 2',
       isSeller: true,

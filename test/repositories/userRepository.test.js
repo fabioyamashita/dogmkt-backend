@@ -2,20 +2,7 @@ const User = require("../../src/models/userModel");
 const userRepository = require("../../src/repositories/userRepository");
 const sinon = require("sinon");
 
-const mockUser = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com'
-};
-
-const mockUserWithPassword = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com',
-  password: '1234'
-};
+const { mockUserDB: mockUser, mockUserRequestBody: mockUserWithPassword } = require('../mocks/user.mock');
 
 describe('userRepository.findById Tests', () => {
   afterEach(() => jest.clearAllMocks());

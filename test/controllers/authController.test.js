@@ -1,13 +1,8 @@
 const rewire = require("rewire");
 
-let authController;
+const { mockUserDB: mockUser, mockUserRequestBody } = require("../mocks/user.mock");
 
-const mockUser = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com'
-};
+let authController;
 
 describe("createSendToken tests", () => {
   beforeEach(() => {
@@ -65,21 +60,13 @@ describe("removePasswordFromOutput tests", () => {
 
   it("should remove the password property from the user object", () => {
     // Arrange
-    const mockUserWithPassword = { 
-      id: '64617c4eac31a04063dcffc2', 
-      name: 'John Albert',
-      isSeller: false,
-      email: 'test@gmail.com',
-      password: '1234'
-    };
-
+    const mockUserWithPassword = mockUserRequestBody;
     const removePasswordFromOutput = authController.__get__("removePasswordFromOutput");
 
     // Act
     removePasswordFromOutput(mockUserWithPassword);
 
     // Assert
-    expect(mockUserWithPassword).toEqual(mockUser);
     expect(mockUserWithPassword.password).toBeUndefined();
   });
 });

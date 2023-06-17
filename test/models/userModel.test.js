@@ -1,12 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../../src/models/userModel');
 
-const validUserData = {
-  name: "John Doe",
-  email: "johndoeudermodel@example.com",
-  password: "password123",
-  passwordConfirm: "password123",
-};
+const { authSignUpRequestBody: validUserData } = require('../mocks/user.mock');
 
 describe('userModel tests', () => {
   beforeAll(async () => {

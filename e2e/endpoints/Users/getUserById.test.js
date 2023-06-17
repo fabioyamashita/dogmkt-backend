@@ -4,18 +4,15 @@ const User = require('../../../src/models/userModel');
 const sinon = require("sinon");
 const authController = require('../../../src/controllers/authController');
 
+const { mockUserRequestBody: mockUser } = require('../../../test/mocks/user.mock');
+
 let app;
 
 const authToken = "VALID-TOKEN";
-const mockUser = { 
-  name: 'John Albert',
-  email: 'johnalbertgetuserid@gmail.com',
-  password: 'test1234',
-  passwordConfirm: 'test1234',
-  isSeller: false
-};
 
 describe('GET /users/:idUser with a valid token', () => {
+  let existingUser;
+
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, {
       useNewUrlParser: true,
@@ -38,6 +35,8 @@ describe('GET /users/:idUser with a valid token', () => {
 
   beforeEach(async () => {
     await User.deleteMany({});
+    existingUser = new User(mockUser);
+    await existingUser.save();
   });
 
   afterEach(() => { 
@@ -47,14 +46,11 @@ describe('GET /users/:idUser with a valid token', () => {
   describe('request with an ID that exists', () => {
     test('should return 200 OK and send User in response body', async () => {
       // Arrange
-      const existingUser = new User(mockUser);
-      await existingUser.save();
-
       const userFound = { 
         id: existingUser._id.toString(),
-        name: 'John Albert',
-        email: 'johnalbertgetuserid@gmail.com',
-        isSeller: false
+        name: mockUser.name,
+        email: mockUser.email,
+        isSeller: mockUser.isSeller,
       };
   
       // Act
@@ -71,9 +67,6 @@ describe('GET /users/:idUser with a valid token', () => {
   describe('request with an ID that does not exists', () => {
     test('it should return 404 Not Found', async () => {
       // Arrange
-      const existingUser = new User(mockUser);
-      await existingUser.save();
-
       const nonExistingUserId = '5f9c2b8d2a8d0b1d1c9c9c9c';
       
       // Act

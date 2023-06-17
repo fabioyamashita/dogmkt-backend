@@ -2,6 +2,8 @@ const userController = require('../../src/controllers/userController');
 const userService = require('../../src/services/userService');
 const AppError = require('../../src/utils/appError');
 
+const { mockUserDB: mockUser } = require("../mocks/user.mock");
+
 let req, res, next;
 
 const setInitialMockValues = () => {
@@ -17,13 +19,6 @@ const setInitialMockValues = () => {
   };
   
   next = jest.fn(); 
-};
-
-const mockUser = { 
-  id: '64617c4eac31a04063dcffc2', 
-  name: 'John Albert',
-  isSeller: false,
-  email: 'test@gmail.com'
 };
 
 userService.findById = jest.fn();

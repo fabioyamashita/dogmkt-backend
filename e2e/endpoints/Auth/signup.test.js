@@ -4,13 +4,7 @@ const app = require('../../../src/app');
 const User = require('../../../src/models/userModel');
 const userService = require('../../../src/services/userService');
 
-const mockUser = { 
-  name: 'John Albert',
-  email: 'johnalbertsignup@gmail.com',
-  password: 'test1234',
-  passwordConfirm: 'test1234',
-  isSeller: false
-};
+const { mockUserRequestBody: mockUser } = require('../../../test/mocks/user.mock');
 
 describe('POST /signup tests', () => {
   beforeAll(async () => {
