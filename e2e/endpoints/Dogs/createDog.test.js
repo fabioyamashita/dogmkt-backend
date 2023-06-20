@@ -56,6 +56,18 @@ describe('POST /dogs with a valid bearer token', () => {
     expect(response.body.data.dateOfBirth).toBe("2020-10-18");
   });
 
+  it('should return the correct location header with a valid Dog', async () => {
+    // Act
+    const response = await request(app)
+      .post('/api/v1/dogs')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(mockDog);
+
+    // Assert
+    expect(response.status).toBe(201);
+    expect(response.header.location).toBe(`http://localhost:3000/api/v1/dogs/${response.body.data.id}`);
+  });
+
   it('should return 400 if request body is missing a field', async () => {
     // Arrange
     let invalidDogMock = JSON.parse(JSON.stringify(mockDog));

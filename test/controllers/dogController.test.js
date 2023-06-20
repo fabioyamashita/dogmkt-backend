@@ -16,7 +16,8 @@ const setInitialMockValues = () => {
   
   res = {
     status: jest.fn().mockReturnThis(),
-    json: jest.fn()
+    json: jest.fn(),
+    location: jest.fn()
   };
   
   next = jest.fn(); 
@@ -40,6 +41,18 @@ describe('dogController.createDog Tests', () => {
     expect(res.json).toHaveBeenCalledWith({
       data: mockDog
     });
+  });
+
+  it('should return the correct location header with a valid Dog', async () => {
+    // Arrange
+    dogService.create.mockResolvedValueOnce(mockDog);
+
+    // Act
+    await dogController.createDog(req, res, next);
+
+    // Assert
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.location).toHaveBeenCalledWith(`http://localhost:3000/api/v1/dogs/${mockDog.id}`);
   });
 
   it('should call next() with an AppError with 422 code', async () => {

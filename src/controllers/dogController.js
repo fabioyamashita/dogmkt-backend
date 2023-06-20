@@ -10,6 +10,7 @@ exports.createDog = async (req, res, next) => {
     return next(new AppError(422, "The request was well-formed but unable to be followed due to semantic errors.", "Try again later!"));
   };
 
+  res.location(`http://localhost:3000/api/v1/dogs/${dog.id}`);
   res.status(201).json({
     data: dog
   });
