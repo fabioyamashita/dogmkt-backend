@@ -2033,7 +2033,7 @@ components:
           isFirst: true
           isLast: false
           totalElements: 8
-        Example 2:
+        Example 2 - 1 Page Found:
           first: 1
           last: 1
           previous: null
@@ -2042,6 +2042,15 @@ components:
           isFirst: true
           isLast: true
           totalElements: 2
+        Example 3 - No Dogs Found:
+          first: null
+          last: null
+          previous: null
+          next: null
+          page: null
+          isFirst: null
+          isLast: null
+          totalElements: 0
       properties:
         first:
           type: integer
@@ -2049,14 +2058,14 @@ components:
             id: heb7eei0hh7fx
           description: The first page in the pagination sequence.
           example: 1
-          minimum: 1
+          nullable: true
         last:
           type: integer
           x-stoplight:
             id: 68whsvrf5ok5l
-          minimum: 1
           description: The last page in the pagination sequence.
           example: 50
+          nullable: true
         previous:
           type: integer
           x-stoplight:
@@ -2077,17 +2086,19 @@ components:
             id: 1ift72adznaf6
           description: The current page in the pagination sequence.
           example: 2
-          minimum: 1
+          nullable: true
         isFirst:
           type: boolean
           x-stoplight:
             id: ftrjo0wz342g9
           description: A flag indicating whether the current page is the first page in the pagination sequence.
+          nullable: true
         isLast:
           type: boolean
           x-stoplight:
             id: ojl34m66l7b5o
           description: A flag indicating whether the current page is the last page in the pagination sequence.
+          nullable: true
         totalElements:
           type: integer
           x-stoplight:
