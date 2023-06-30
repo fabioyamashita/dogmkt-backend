@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post("/", dogController.createDog);
+router
+  .get("/", dogController.getDogs)
+  .post("/", dogController.createDog);
 
 module.exports = router;
