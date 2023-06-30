@@ -15,3 +15,12 @@ exports.createDog = async (req, res, next) => {
     data: dog
   });
 };
+
+exports.getDogs = async (req, res, next) => {
+  const dogsReturned = await dogService.getAll(req.query);
+
+  res.status(200).json({
+    data: dogsReturned.dogs,
+    pagination: dogsReturned.pagination,
+  });
+};
