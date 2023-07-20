@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
 const dogService = require('../../src/services/dogService');
 const dogRepository = require("../../src/repositories/dogRepository");
+const paginationUtil = require('../../src/utils/paginationUtil');
+const apiUtil = require('../../src/utils/apiUtil');
 
-const { mockDog } = require('../mocks/dog.mock');
+const { mockDog, mockArrayDogs } = require('../mocks/dog.mock');
 
 describe('dogService.create Tests', () => {
   afterEach(() => jest.clearAllMocks());
@@ -31,5 +32,71 @@ describe('dogService.create Tests', () => {
     // Assert
     expect(dogRepository.create).toHaveBeenCalledWith(mockDog);
     expect(dog).toBeNull();
+  });
+});
+
+describe('dogService.getAll Tests', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  paginationUtil.getPageLimit = jest.fn();
+  apiUtil.removeExcludedFields = jest.fn();
+  dogRepository.getAll = jest.fn();
+  dogRepository.countDocuments = jest.fn();
+  paginationUtil.getPaginationInfo = jest.fn();
+
+  it('should successfully get all Dogs', async () => {
+    // Arrange
+    const pagination = {
+      first: 1,
+      last: 10,
+      previous: null,
+      next: 2,
+      page: 1,
+      isFirst: true,
+      isLast: false,
+      totalElements: 100,
+    };
+
+    const queryString = {};
+
+    paginationUtil.getPageLimit.mockReturnValueOnce({ page: 1, limit: 10 });
+    apiUtil.removeExcludedFields.mockReturnValueOnce(queryString);
+    dogRepository.getAll.mockResolvedValueOnce(mockArrayDogs);
+    dogRepository.countDocuments.mockResolvedValueOnce(1);
+    paginationUtil.getPaginationInfo.mockReturnValueOnce(pagination);
+
+    // Act
+    const result = await dogService.getAll(queryString);
+
+    // Assert
+    expect(result).toEqual({ dogs: mockArrayDogs, pagination: pagination });
+  });
+
+  it('should return an empty array when trying to get all Dogs and no dog is found', async () => {
+    // Arrange
+    const pagination = {
+      first: null,
+      last: null,
+      previous: null,
+      next: null,
+      page: null,
+      isFirst: null,
+      isLast: null,
+      totalElements: 0,
+    };
+
+    const queryString = {};
+
+    paginationUtil.getPageLimit.mockReturnValueOnce({ page: 1, limit: 10 });
+    apiUtil.removeExcludedFields.mockReturnValueOnce(queryString);
+    dogRepository.getAll.mockResolvedValueOnce([]);
+    dogRepository.countDocuments.mockResolvedValueOnce(0);
+    paginationUtil.getPaginationInfo.mockReturnValueOnce(pagination);
+
+    // Act
+    const result = await dogService.getAll(queryString);
+
+    // Assert
+    expect(result).toEqual({ dogs: [], pagination: pagination });
   });
 });
