@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
 const dogController = require('../../src/controllers/dogController');
 const dogService = require('../../src/services/dogService');
 const AppError = require('../../src/utils/appError');
 
-const { mockDog } = require('../mocks/dog.mock');
+const { mockDog, mockArrayDogs } = require('../mocks/dog.mock');
 
 let req, res, next;
 
@@ -23,11 +22,11 @@ const setInitialMockValues = () => {
   next = jest.fn(); 
 };
 
-dogService.create = jest.fn();
-
 describe('dogController.createDog Tests', () => {
   beforeEach(() => setInitialMockValues());
   afterEach(() => jest.clearAllMocks());
+
+  dogService.create = jest.fn();
 
   it('should successfully create a Dog with a valid Dog and return the created Dog with a 201 response', async () => {
     // Arrange
@@ -68,5 +67,40 @@ describe('dogController.createDog Tests', () => {
     expect(next).toHaveBeenCalledWith(
       new AppError(422, "The request was well-formed but unable to be followed due to semantic errors.", "Try again later!")
     );
+  });
+});
+
+describe('dogController.getDogs Tests', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  dogService.getAll = jest.fn()
+
+  it('should successfully get all Dogs with with a 200 response', async () => {
+    // Arrange
+    const pagination = {
+      first: 1,
+      last: 10,
+      previous: null,
+      next: 2,
+      page: 1,
+      isFirst: true,
+      isLast: false,
+      totalElements: 100,
+    };
+
+    dogService.getAll.mockResolvedValueOnce({
+      dogs: mockArrayDogs,
+      pagination: pagination
+    });
+
+    // Act
+    await dogController.getDogs(req, res, next);
+
+    // Assert
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      data: mockArrayDogs,
+      pagination: pagination
+    });
   });
 });
