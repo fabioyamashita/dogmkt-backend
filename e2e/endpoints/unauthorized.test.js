@@ -15,6 +15,7 @@ userService.findById = jest.fn();
 userRepository.updateById = jest.fn();
 userService.updateById = jest.fn();
 dogRepository.create = jest.fn();
+dogRepository.getAll = jest.fn();
 dogService.create = jest.fn();
 
 describe('GET /users/:idUser tests', () => {
@@ -108,6 +109,35 @@ describe('POST /dogs tests', () => {
       .post('/api/v1/dogs')
       .set('Authorization', 'Bearer ' + authToken)
       .send(mockDog);
+
+    // Assert
+    expect(response.status).toBe(401);
+  });
+});
+
+describe('GET /dogs tests', () => {
+  afterEach(() => { jest.clearAllMocks(); });
+  
+  it('should return 401 Unauthorized with a request without a Bearer token in header', async () => {
+    // Arrange
+    dogRepository.getAll.mockResolvedValueOnce(null);
+
+    // Act
+    const response = await request(app)
+      .get('/api/v1/dogs');
+
+    // Assert
+    expect(response.status).toBe(401);
+  });
+
+  it('should return 401 Unauthorized with a request with an invalid Bearer token in header', async () => {
+    // Arrange
+    dogRepository.getAll.mockResolvedValueOnce(null);
+
+    // Act
+    const response = await request(app)
+      .get('/api/v1/dogs')
+      .set('Authorization', 'Bearer ' + authToken);
 
     // Assert
     expect(response.status).toBe(401);
