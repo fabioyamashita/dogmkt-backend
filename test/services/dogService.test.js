@@ -3,7 +3,7 @@ const dogRepository = require("../../src/repositories/dogRepository");
 const paginationUtil = require('../../src/utils/paginationUtil');
 const apiUtil = require('../../src/utils/apiUtil');
 
-const { mockDog, mockArrayDogs } = require('../mocks/dog.mock');
+const { mockDogDB, mockArrayDogsDB } = require('../mocks/dog.mock');
 
 describe('dogService.create Tests', () => {
   afterEach(() => jest.clearAllMocks());
@@ -12,14 +12,14 @@ describe('dogService.create Tests', () => {
 
   it('should successfully create a Dog with a valid Dog and return the created Dog', async () => {
     // Arrange
-    dogRepository.create.mockResolvedValueOnce(mockDog);
+    dogRepository.create.mockResolvedValueOnce(mockDogDB);
 
     // Act
-    const dog = await dogService.create(mockDog);
+    const dog = await dogService.create(mockDogDB);
 
     // Assert
-    expect(dogRepository.create).toHaveBeenCalledWith(mockDog);
-    expect(dog).toEqual(mockDog);
+    expect(dogRepository.create).toHaveBeenCalledWith(mockDogDB);
+    expect(dog).toEqual(mockDogDB);
   });
 
   it('should return null when trying to create a Dog with an invalid Dog', async () => {
@@ -27,10 +27,10 @@ describe('dogService.create Tests', () => {
     dogRepository.create.mockResolvedValueOnce(null);
 
     // Act
-    const dog = await dogService.create(mockDog);
+    const dog = await dogService.create(mockDogDB);
 
     // Assert
-    expect(dogRepository.create).toHaveBeenCalledWith(mockDog);
+    expect(dogRepository.create).toHaveBeenCalledWith(mockDogDB);
     expect(dog).toBeNull();
   });
 });
@@ -61,7 +61,7 @@ describe('dogService.getAll Tests', () => {
 
     paginationUtil.getPageLimit.mockReturnValueOnce({ page: 1, limit: 10 });
     apiUtil.removeExcludedFields.mockReturnValueOnce(queryString);
-    dogRepository.getAll.mockResolvedValueOnce(mockArrayDogs);
+    dogRepository.getAll.mockResolvedValueOnce(mockArrayDogsDB);
     dogRepository.countDocuments.mockResolvedValueOnce(1);
     paginationUtil.getPaginationInfo.mockReturnValueOnce(pagination);
 
@@ -69,7 +69,7 @@ describe('dogService.getAll Tests', () => {
     const result = await dogService.getAll(queryString);
 
     // Assert
-    expect(result).toEqual({ dogs: mockArrayDogs, pagination: pagination });
+    expect(result).toEqual({ dogs: mockArrayDogsDB, pagination: pagination });
   });
 
   it('should return an empty array when trying to get all Dogs and no dog is found', async () => {
