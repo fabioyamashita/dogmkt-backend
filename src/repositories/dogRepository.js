@@ -5,22 +5,14 @@ exports.create = async (dogDTO) => {
 };
 
 exports.getAll = async (query, page, limit) => {
-    try {
-      const result = await Dog.find(query)
-      .skip((page - 1) * limit)
-      .limit(limit);
+  const result = await Dog.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit);
 
-      return result || [];
-    } catch (error) {
-      return [];
-    }
+  return result || [];
 }
 
 exports.countDocuments = async (query) => {
-  try {
-    const result = await Dog.countDocuments(query);
-    return result || 0;
-  } catch (error) {
-    return 0;
-  }
+  const result = await Dog.countDocuments(query);
+  return result || 0;
 };

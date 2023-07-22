@@ -29,7 +29,7 @@ exports.getPaginationInfo = (page, limit, total) => {
 };
 
 exports.validatePaginationParameters = (page, limit) => {
-  if (page < 0 || limit < 0) {
+  if (page <= 0 || limit <= 0) {
     throw new AppError(400, "Invalid query parameters.", "'page' and 'limit' must be greater than 0.");
   }
 }

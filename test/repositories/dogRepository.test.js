@@ -48,17 +48,6 @@ describe("dogRepository.countDocuments Tests", () => {
     expect(result).toEqual(10);
   });
 
-  it('should return 0 when trying to count the number of documents in the DB and an error occurs', async () => {
-    // Arrange
-    Dog.countDocuments.mockRejectedValueOnce(null);
-
-    // Act
-    const result = await dogRepository.countDocuments({});
-
-    // Assert
-    expect(result).toEqual(0);
-  });
-
   it('should return 0 when trying to count the number of documents in the DB and the result is null', async () => {
     // Arrange
     Dog.countDocuments.mockResolvedValueOnce(null);
@@ -105,25 +94,6 @@ describe("dogRepository.getAll Tests", () => {
     Dog.find = sinon.stub().callsFake(() => ({
       skip: sinon.stub().callsFake(() => ({
         limit: sinon.stub().resolves(null)
-      })),
-    }));
-
-    // Act
-    const result = await dogRepository.getAll(query, page, limit);
-
-    // Assert
-    expect(result).toEqual([]);
-  });
-
-  it('should return an empty array when trying to get all documents in the DB and an error occurs', async () => {
-    // Arrange
-    const query = {};
-    const page = 1;
-    const limit = 10;
-
-    Dog.find = sinon.stub().callsFake(() => ({
-      skip: sinon.stub().callsFake(() => ({
-        limit: sinon.stub().rejects(null)
       })),
     }));
 

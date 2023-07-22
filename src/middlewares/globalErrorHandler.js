@@ -19,6 +19,10 @@ const handleValidationErrorDB = (err) => {
   return new AppError(400, "The request contains malformed data in parameters.", message);
 };
 
+const handleValidationParametersError = (err) => {
+  return new AppError(400, "The request contains malformed data in parameters.", "Check the parameters and try again.");
+};
+
 const handleJWTError = () => new AppError(401, "Unauthorized.", "");
 const handleJWTExpiredError = () => new AppError(401, "Unauthorized.", "");
 
@@ -68,6 +72,7 @@ module.exports = (err, req, res, next) => {
     if (error.name === "CastError") error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === "ValidationError") error = handleValidationErrorDB(error);
+    if (error.code === 51024) error = handleValidationParametersError(error);
     if (error.name === "JsonWebTokenError") error = handleJWTError();
     if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
 

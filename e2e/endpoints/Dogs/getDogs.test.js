@@ -140,12 +140,22 @@ describe('GET /dogs with a valid bearer token', () => {
   it('should successfully get a empty list with a 200 response when no Dog is found filtering by idSeller', async () => {
     // Act
     const response = await request(app)
-      .get(`/api/v1/dogs?idSeller=INEXISTENT-ID`)
+      .get(`/api/v1/dogs?idSeller=5f8d0b2b4f4d4b1b3c6f1b49`)
       .set('Authorization', `Bearer ${authToken}`);
 
     // Assert
     expect(response.status).toBe(200);
     expect(response.body.data).toHaveLength(0);
     expect(response.body.pagination).toEqual(expectedPaginationNoDog);
+  });
+
+  it('should return a 400 response when providing an idSeller in a wrong format', async () => {
+    // Act
+    const response = await request(app)
+      .get(`/api/v1/dogs?idSeller=INVALID-FORMAT-TOKEN`)
+      .set('Authorization', `Bearer ${authToken}`);
+
+    // Assert
+    expect(response.status).toBe(400);
   });
 });
